@@ -1,78 +1,122 @@
 const express = require('express');
 const router = express.Router();
 
-const connection = require('../db/mysqlconfig.js');
 const security = require('../util/security');
 const hash = require('../util/hash').digest;
 
+const users = require('../model/users');
+const tool = require('../util/tool');
+
 // TOPページ
-router.get('/', security.authorize(), function (req, res, next) {
-  connection.query('select id, name from users', function (error, results, fields) {
-    if (error) throw error;
-    res.render('users', {
-      title: 'Express',
-      users: results,
+router.get('/', security.authorize(), (req, res, next) => {
+  (async () => {
+    const retObjUser = await users.find();
+    res.render("./users", {
+      users: retObjUser,
     });
-  });
+  })();
 });
 
 // メニューから登録画面（usersForm）へ
-router.get('/insert', security.authorize(), function (req, res, next) {
+router.get('/insert', security.authorize(), (req, res, next) => {
   res.render('usersform', {
-    title: 'Express',
     user: null,
     mode: 'insert',
+    message: null,
   });
 });
 
 //ユーザIDを指定して更新画面（usersForm）へ
-router.get('/update/:id', security.authorize(), function (req, res, next) {
-  const id = req.params.id;
-  connection.query('select * from users where id = "' + id + '"', function (error, results, fields) {
-    if (error) throw error;
+router.get('/update/:id', security.authorize(), (req, res, next) => {
+  (async () => {
+    const retObjUser = await users.findPKey(req.params.id);
     res.render('usersform', {
-      title: 'Express',
-      user: results[0],
+      user: retObjUser[0],
       mode: 'update',
+      message: null,
     });
-  });
+  })();
 });
 
 //ユーザ情報の登録
-router.post('/insert', security.authorize(), function (req, res, next) {
-  const id = req.body.id;
-  const name = req.body.name;
-  const pwd = hash(req.body.password);
-  const role = req.body.role;
+router.post('/insert', security.authorize(), (req, res, next) => {
+  let inObjUser = {};
+  inObjUser.id = req.body.id;
+  inObjUser.name = req.body.name;
+  inObjUser.password = hash(req.body.password);
+  inObjUser.role = req.body.role;
+  inObjUser.id_add = req.user.id;
+  inObjUser.ymd_add = tool.getYYYYMMDD(new Date());
+  inObjUser.id_upd = req.user.id;
+  inObjUser.ymd_upd = tool.getYYYYMMDD(new Date());
 
-  const query = 'insert into users values ("' + id + '","' + name + '","' + pwd + '","' + role + '")';
-  connection.query(query, function (error, results, fields) {
-    if (error) throw error;
-    res.redirect(req.baseUrl);
-  });
+  (async () => {
+    try {
+      const retObjUsers = await users.insert(inObjUser);
+      res.redirect(req.baseUrl);
+    } catch (err) {
+      if (err.errno === 1062) {
+        res.render("/userform", {
+          user: inObjUser,
+          mode: "insert",
+          message: "ユーザー【" + inObjUser.id + "】はすでに存在しています",
+        });
+      } else {
+        throw err;
+      }
+    }
+  })();
+
 });
 
 //ユーザ情報の更新
-router.post('/update/update', security.authorize(), function (req, res, next) {
-  const id = req.body.id;
-  const name = req.body.name;
-  const pwd = hash(req.body.password);
-  const role = req.body.role;
-  const query = 'update users set name = "' + name + '", password = "' + pwd + '", role = "' + role + '" where id = "' + id + '"';
-  connection.query(query, function (error, results, fields) {
-    if (error) throw error;
-    res.redirect(req.baseUrl);
-  });
+router.post('/update/update', security.authorize(), (req, res, next) => {
+  let inObjUser = {};
+  inObjUser.id = req.body.id;
+  inObjUser.name = req.body.name;
+  inObjUser.password = hash(req.body.password);
+  inObjUser.role = req.body.role;
+  inObjUser.ymd_add = req.body.ymd_add;
+  inObjUser.id_add = req.body.id_add;
+  inObjUser.ymd_upd = tool.getYYYYMMDD(new Date());
+  inObjUser.id_upd = req.user.id;
+  (async () => {
+    const retObjUser = await users.update(inObjUser);
+    if (retObjUser.changedRows === 0) {
+      res.render("/userform", {
+        user: inObjUser,
+        mode: "update",
+        message: "更新対象がすでに削除されています",
+      });
+    } else {
+      res.redirect(req.baseUrl);
+    }
+  })();
 });
 
 //ユーザ情報の削除
 router.post('/update/delete', security.authorize(), function (req, res, next) {
-  const id = req.body.id;
-  const query = 'delete from users where id = "' + id + '"';
-  connection.query(query, function (error, results, fields) {
-    if (error) throw error;
-    res.redirect(req.baseUrl);
-  });
+  (async () => {
+    try {
+      const retObjUser = await users.remove(req.body.id);
+      res.redirect(req.baseUrl);
+    } catch (err) {
+      if (err && err.errno === 1451) {
+        try {
+          const retObjUser_again = await ussers.findPKey(req.body.id);
+          res.render("/userform", {
+            user: retObjUser_again[0],
+            mode: "update",
+            message: "削除対象のユーザーは使用されています",
+          });
+        } catch (err) {
+          throw err;
+        }
+      } else {
+        throw err;
+      }
+    }
+  })();
 });
 
 module.exports = router;

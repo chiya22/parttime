@@ -2,14 +2,12 @@
 <html>
 
 <head>
-  <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 
 <body>
-  <h1><%= title %></h1>
-  <p>Welcome to <%= title %></p>
-  <a href="users">ユーザ管理</a>
+  <p>Welcome To Parttime</p>
+  <a href="/users">ユーザ管理</a>
   <% if (locals.user){ %>
   <form method="POST" action="/logout">
     <input type="submit" button value="ログアウト" />

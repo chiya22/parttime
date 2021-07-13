@@ -2,12 +2,15 @@
 <html>
 
 <head>
-  <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 
 <body>
-  <h1><%= title %></h1>
+  <% if (message && message.length !== 0) { %>
+    <div class="alert alert-danger">
+      <%= message %>
+    </div>
+  <% } %>
   <form name="userform" method="POST">
     <% if (mode === 'insert') { %>
     <input type="text" name="id" required>
@@ -21,6 +24,10 @@
     <input type="text" name="name" value="<%= user.name %>" required>
     <input type="password" name="password" value="" required>
     <input type="text" name="role" value="<%= user.role %>">
+    <input type="hidden" name="ymd_add" value="<%= user.ymd_add %>">
+    <input type="hidden" name="id_add" value="<%= user.id_add %>">
+    <input type="hidden" name="ymd_upd" value="<%= user.ymd_upd %>">
+    <input type="hidden" name="id_upd" value="<%= user.id_upd %>">
     <input type="button" id="btn_update" value="更新">
     <input type="button" id="btn_delete" value="削除">
     <% } %>
@@ -29,21 +36,21 @@
   <script>
     let insertbtn = document.getElementById("btn_insert");
     if (insertbtn) {
-      insertbtn.addEventListener("click", function () {
+      insertbtn.addEventListener("click", () => {
         document.userform.action = "insert";
         document.userform.submit();
       })
     }
     let updatebtn = document.getElementById("btn_update");
     if (updatebtn) {
-      updatebtn.addEventListener("click", function () {
+      updatebtn.addEventListener("click", () => {
         document.userform.action = "update";
         document.userform.submit();
       })
     }
     let deletebtn = document.getElementById("btn_delete");
     if (deletebtn) {
-      deletebtn.addEventListener("click", function () {
+      deletebtn.addEventListener("click", () => {
         document.userform.action = "delete";
         document.userform.submit();
       })
