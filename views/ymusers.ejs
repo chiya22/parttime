@@ -10,22 +10,20 @@
 
 <body>
   <div class="main-container">
+    <h1 class="main-header"><%= yms.slice(0,4) %>年<%= yms.slice(-2) %>月</h1>
     <ul>
       <% if (users) { %>
       <%  users.forEach( user => { %>
       <li>
-        <a class="btn" href="users/update/<%= user.id %>">
-          <%= user.name %>（<%= user.id %>）
+        <a class="btn" href="<%= yms %>/<%= user.id_users %>">
+          <%= user.name_users %>（<%= user.id_users %>）
         </a>
       </li>
       <%  }) %>
       <% } %>
     </ul>
     <div class="btn-footer">
-      <a class="btn-link" href="users/insert">新規登録</a>
-    </div>
-    <div class="btn-footer">
-      <a href="/" class="btn-link">戻る</a>
+      <a href="/yms" class="btn-link">戻る</a>
       <% if (locals.user){ %>
         <form method="POST" action="/logout">
           <input type="submit" class="btn-link" button value="ログアウト" />

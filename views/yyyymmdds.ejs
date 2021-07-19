@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel='stylesheet' href='/stylesheets/destyle.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+  <title>バイトシフト調整</title>
+</head>
+
+<body>
+  <div class="main-container">
+    <h1 class="main-header">
+      <%= target_yyyymm.slice(0,4) %>年<%= target_yyyymm.slice(4,6) %>月 <%= target_name_users %>
+    </h1>
+  <form action="./update" method="POST">
+  <% if (yyyymmdds) { %>
+    <% yyyymmdds.forEach( yyyymmdd => { %>
+      <div class="row">
+        <% const ishaya=yyyymmdd.kubun==='1' ?'checked':''; const isoso=yyyymmdd.kubun==='2' ?'checked':''; const
+          ishayaoso=yyyymmdd.kubun==='3' ?'checked':''; const isng=yyyymmdd.kubun==='4' ?'checked':''; %>
+            <group class="inline-radio">
+
+              <% if (yyyymmdd.daykubun === '3') { %>
+                <div class="row-header row-header-color-holiday">
+              <% } else if (yyyymmdd.daykubun === '2') { %>
+                <div class="row-header row-header-color-saturday">
+              <% } else { %>
+                <div class="row-header row-header-color">
+              <% } %>
+                <%= yyyymmdd.yyyymmdd.slice(4,6) %>月<%= yyyymmdd.yyyymmdd.slice(6,8) %>日
+              </div>
+
+              <div class="row-radio">
+                <input class="row-radio-input" id="kubun-1" type="radio" name="kubun_<%= yyyymmdd.yyyymmdd %>" value="1" <%=ishaya %> /><label class="row-radio-label" for="kubun_1">早</label>
+              </div>
+              <div class="row-radio">
+                <input class="row-radio-input" id="kubun-2" type="radio" name="kubun_<%= yyyymmdd.yyyymmdd %>" value="2" <%=isoso %> /><label class="row-radio-label" for="kubun_2">遅</label>
+              </div>
+              <div class="row-radio">
+                <input class="row-radio-input" id="kubun-3" type="radio" name="kubun_<%= yyyymmdd.yyyymmdd %>" value="3" <%=ishayaoso %> /><label class="row-radio-label" for="kubun_3">どちらもOK</label>
+              </div>
+              <div class="row-radio">
+                <input class="row-radio-input" id="kubun-4" type="radio" name="kubun_<%= yyyymmdd.yyyymmdd %>" value="4" <%=isng %> /><label class="row-radio-label" for="kubun_4">どちらもNG</label>
+              </div>
+            </group>
+        <input type="hidden" name="target_yyyymm" value="<%= target_yyyymm %>" />
+        <input type="hidden" name="id_users" value="<%= yyyymmdd.id_users %>" />
+        <input type="hidden" name="yyyymm" value="<%= yyyymmdd.yyyymm %>" />
+        <input type="hidden" name="yyyymmdd" value="<%= yyyymmdd.yyyymmdd %>" />
+        <input type="hidden" name="kubun" value="<%= yyyymmdd.kubun %>" />
+        <input type="hidden" name="ymd_add" value="<%= yyyymmdd.ymd_add %>" />
+        <input type="hidden" name="id_add" value="<%= yyyymmdd.id_add %>" />
+        <input type="hidden" name="ymd_upd" value="<%= yyyymmdd.ymd_upd %>" />
+        <input type="hidden" name="id_upd" value="<%= yyyymmdd.id_upd %>" />
+      </div>
+      <% }) %>
+    <% } %>
+      <div class="btn-footer">
+        <textarea name="memo" class="form-memo-style" placeholder="MEMO"><%= memo %></textarea>
+        <input type="submit" class="btn-update" value="更新" />
+      </div>
+    </form>
+    <div class="btn-footer">
+      <% if (mode === 'admin') { %>
+        <a href="/yms/users/<%= target_yyyymm %>" class="btn-link">戻る</a>
+      <% } else { %>
+        <a href="/" class="btn-link">戻る</a>
+      <% } %>
+      <% if (locals.user){ %>
+      <form method="POST" action="/logout">
+        <input type="submit" class="btn-link" button value="ログアウト" />
+      </form>
+    <% } %>
+    </div>
+    </div>
+</body>
+
+</html>

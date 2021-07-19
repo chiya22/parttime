@@ -2,17 +2,44 @@
 <html>
 
 <head>
+  <link rel='stylesheet' href='/stylesheets/destyle.css' />
   <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+  <title>バイトシフト調整</title>
 </head>
 
 <body>
-  <p>Welcome To Parttime</p>
-  <a href="/users">ユーザ管理</a>
-  <% if (locals.user){ %>
-  <form method="POST" action="/logout">
-    <input type="submit" button value="ログアウト" />
-  </form>
-  <% } %>
+  <div class="main-container">
+    <h1 class="main-header"><%= user.name %></h1>
+    <% if (yms) { %>
+        <% yms.forEach( ym=> { %>
+          <% const name_status=ym.status==='1' ?'未募集':ym.status==='2' ?'募集中':ym.status==='3' ?'募集終了':''; %>
+          <% if (ym.status === '2') { %>
+            <a class="btn" href="yyyymmdds/<%= ym.yyyymm %>">
+            <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(4,6) %>月 <%= name_status %>
+            </a>
+          <% } else { %>
+            <div class="btn-disabled">
+              <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(4,6) %>月 <%= name_status %>
+            </div>
+          <% } %>
+      <% }) %>
+    <% } %>
+
+    <% if (user.role === 'admin') { %>
+    <div class="btn-footer">
+      <a class="btn-link" href="/users">ユーザ管理</a>
+      <a class="btn-link" href="/yms">年月管理</a>
+    </div>
+    <% } %>
+    <% if (locals.user){ %>
+      <div class="btn-footer">
+        <form method="POST" action="/logout">
+          <input type="submit" class="btn-link" value="ログアウト" />
+        </form>
+      </div>
+      <% } %>
+  </div>
 </body>
 
 </html>

@@ -2,28 +2,38 @@
 <html>
 
 <head>
+  <link rel='stylesheet' href='/stylesheets/destyle.css' />
   <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+  <title>バイトシフト調整</title>
 </head>
 
 <body>
-  <form action="/login" method="post">
-    <div>
-      <label>ユーザーID：</label>
-      <input type="text" name="username" />
-    </div>
-    <div>
-      <label>パスワード：</label>
-      <input type="password" name="password" />
-    </div>
-    <div>
-      <input type="submit" value="ログイン" />
-    </div>
+  <div class="main-container">
     <% if (message && message.length !== 0) { %>
-    <div class="alert alert-danger">
-      <%= message %>
-    </div>
+      <div class="alert">
+        <p class="alert-danger">
+          <%= message %>
+        </p>
+      </div>
     <% } %>
-  </form>
+    <div class="login-header-img">
+      <img src="/images/building_logo.svg">
+    </div>
+    <form action="/login" method="post">
+      <div class="form-area">
+        <div>
+          <input class="form-item-style" type="text" name="username" placeholder="ID" autofocus />
+        </div>
+        <div>
+          <input class="form-item-style" type="password" name="password" placeholder="パスワード" />
+        </div>
+        <div>
+          <input class="btn-link" type="submit" value="ログイン" />
+        </div>
+        </div>
+    </form>
+  </div>
 </body>
 
 </html>

@@ -19,8 +19,8 @@ router.get('/', security.authorize(), (req, res, next) => {
 
 // メニューから登録画面（usersForm）へ
 router.get('/insert', security.authorize(), (req, res, next) => {
-  res.render('usersform', {
-    user: null,
+  res.render('userform', {
+    selectuser: null,
     mode: 'insert',
     message: null,
   });
@@ -30,8 +30,8 @@ router.get('/insert', security.authorize(), (req, res, next) => {
 router.get('/update/:id', security.authorize(), (req, res, next) => {
   (async () => {
     const retObjUser = await users.findPKey(req.params.id);
-    res.render('usersform', {
-      user: retObjUser[0],
+    res.render('userform', {
+      selectuser: retObjUser[0],
       mode: 'update',
       message: null,
     });
@@ -56,7 +56,7 @@ router.post('/insert', security.authorize(), (req, res, next) => {
       res.redirect(req.baseUrl);
     } catch (err) {
       if (err.errno === 1062) {
-        res.render("/userform", {
+        res.render("userform", {
           user: inObjUser,
           mode: "insert",
           message: "ユーザー【" + inObjUser.id + "】はすでに存在しています",
@@ -83,7 +83,7 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
   (async () => {
     const retObjUser = await users.update(inObjUser);
     if (retObjUser.changedRows === 0) {
-      res.render("/userform", {
+      res.render("userform", {
         user: inObjUser,
         mode: "update",
         message: "更新対象がすでに削除されています",
@@ -104,7 +104,7 @@ router.post('/update/delete', security.authorize(), function (req, res, next) {
       if (err && err.errno === 1451) {
         try {
           const retObjUser_again = await ussers.findPKey(req.body.id);
-          res.render("/userform", {
+          res.render("userform", {
             user: retObjUser_again[0],
             mode: "update",
             message: "削除対象のユーザーは使用されています",

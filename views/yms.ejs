@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel='stylesheet' href='/stylesheets/destyle.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+  <title>バイトシフト調整</title>
+</head>
+
+<body>
+  <div class="main-container">
+  <% if (yms) { %>
+    <%  yms.forEach( ym => { %>
+      <div class="row">
+        <% const name_status=ym.status==='1' ?'未募集':ym.status==='2' ?'募集中':ym.status==='3' ?'募集終了':''; %>
+        <% if (ym.status === '2') { %>
+          <a class="btn-admin" href="yms/update/<%= ym.yyyymm %>">
+          <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 (<%= name_status %>)
+          </a>
+        <% } else { %>
+          <a class="btn-admin-disabled" href="yms/update/<%= ym.yyyymm %>">
+            <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 (<%= name_status %>)
+          </a>
+        <% } %>
+        <a href="yms/users/<%= ym.yyyymm %>">
+          <img class="img-users" src="/images/users.svg">
+        </a>
+        <a href="yms/download/<%= ym.yyyymm %>">
+          <img class="img-download" src="/images/download.svg">
+        </a>
+      </div>
+    <%  }) %>
+    <% } %>
+  <div class="btn-footer">
+    <a class="btn-link" href="yms/insert">年月登録</a>
+  </div>
+  <div class="btn-footer">
+    <a href="/" class="btn-link">戻る</a>
+    <% if (locals.user){ %>
+      <form method="POST" action="/logout">
+        <input type="submit" class="btn-link" button value="ログアウト" />
+      </form>
+    <% } %>
+    </div>
+  </div>
+</body>
+
+</html>
