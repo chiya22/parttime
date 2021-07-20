@@ -67,18 +67,17 @@ body {
 .img-download {
   width: 20px;
   margin: 0 0 30px 10px;
-  transition: .3s;
 }
 .img-users {
   width: 30px;
   margin: 0 0 25px 10px;
-  transition: .3s;
 }
+
+
 .btn:hover,
 .btn-link:hover,
 .btn-update:hover,
-.btn-delete:hover,
-.img-download {
+.btn-delete:hover {
   transform: scale(1.1);
 }
 .btn-disabled {
