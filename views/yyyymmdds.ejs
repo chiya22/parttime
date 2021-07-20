@@ -13,8 +13,12 @@
     <h1 class="main-header">
       <%= target_yyyymm.slice(0,4) %>年<%= target_yyyymm.slice(4,6) %>月 <%= target_name_users %>
     </h1>
-  <form action="./update" method="POST">
-  <% if (yyyymmdds) { %>
+  <% if (mode === 'admin') { %>
+    <form action="/yyyymmdds/update" method="POST">
+  <% } else { %>
+    <form action="./update" method="POST">
+  <% } %>
+    <% if (yyyymmdds) { %>
     <% yyyymmdds.forEach( yyyymmdd => { %>
       <div class="row">
         <% const ishaya=yyyymmdd.kubun==='1' ?'checked':''; const isoso=yyyymmdd.kubun==='2' ?'checked':''; const
@@ -53,12 +57,14 @@
         <input type="hidden" name="id_add" value="<%= yyyymmdd.id_add %>" />
         <input type="hidden" name="ymd_upd" value="<%= yyyymmdd.ymd_upd %>" />
         <input type="hidden" name="id_upd" value="<%= yyyymmdd.id_upd %>" />
+        <input type="hidden" name="target_id_users" value="<%= target_id_users %>" />
       </div>
       <% }) %>
     <% } %>
       <div class="btn-footer">
         <textarea name="memo" class="form-memo-style" placeholder="MEMO"><%= memo %></textarea>
         <input type="submit" class="btn-update" value="更新" />
+        <input type="hidden" name="mode" value="<%= mode %>" />
       </div>
     </form>
     <div class="btn-footer">

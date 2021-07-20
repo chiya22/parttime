@@ -112,7 +112,11 @@ router.post('/update', security.authorize(), (req, res, next) => {
     inObjMemo.id_upd = req.user.id;
     await memos.insert(inObjMemo);
 
-    res.redirect('/');
+    if (req.body.mode === 'admin') {
+      res.redirect('/yms/users/' + req.body.yyyymm[0]);
+    } else {
+      res.redirect('/');
+    }
 
   })();
 
