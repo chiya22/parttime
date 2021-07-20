@@ -25,11 +25,11 @@ const findThreeMonth = async () => {
     try {
         let dt = new Date();
         const currentYm = tool.getYYYYMMDD(dt).slice(0,6);
-        dt.setMonth(dt.getMonth() -1);
-        const beforeYm = tool.getYYYYMMDD(dt).slice(0,6);
+        dt.setMonth(dt.getMonth() +1);
+        const afterYm1 = tool.getYYYYMMDD(dt).slice(0,6);
         dt.setMonth(dt.getMonth() +2);
-        const afterYm = tool.getYYYYMMDD(dt).slice(0,6);
-        const query = "SELECT * FROM yms WHERE (yyyymm = '" + currentYm + "' OR yyyymm = '" + beforeYm + "' OR yyyymm = '" + afterYm + "') ORDER BY yyyymm desc;"
+        const afterYm2 = tool.getYYYYMMDD(dt).slice(0,6);
+        const query = "SELECT * FROM yms WHERE (yyyymm = '" + currentYm + "' OR yyyymm = '" + afterYm1 + "' OR yyyymm = '" + afterYm2 + "') ORDER BY yyyymm desc;"
         logger.info(query);
         const retObj = await knex.raw(query)
         return retObj[0];
