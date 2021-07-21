@@ -40,6 +40,7 @@ router.get('/update/:id', security.authorize(), (req, res, next) => {
 
 //ユーザ情報の登録
 router.post('/insert', security.authorize(), (req, res, next) => {
+
   let inObjUser = {};
   inObjUser.id = req.body.id;
   inObjUser.name = req.body.name;
@@ -50,14 +51,25 @@ router.post('/insert', security.authorize(), (req, res, next) => {
   inObjUser.id_upd = req.user.id;
   inObjUser.ymd_upd = tool.getYYYYMMDD(new Date());
 
+  if ((!req.body.id) || (!req.body.name) || (!req.body.password)) {
+    inObjUser.password = '';
+    res.render("userform", {
+      selectuser: inObjUser,
+      mode: "insert",
+    message: "ID、名前、パスワードはすべて入力してください",
+    });
+    return;
+  }
+
   (async () => {
     try {
       const retObjUsers = await users.insert(inObjUser);
       res.redirect(req.baseUrl);
     } catch (err) {
       if (err.errno === 1062) {
+        inObjUser.password = '';
         res.render("userform", {
-          user: inObjUser,
+          selectuser: inObjUser,
           mode: "insert",
           message: "ユーザー【" + inObjUser.id + "】はすでに存在しています",
         });
@@ -74,17 +86,28 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
   let inObjUser = {};
   inObjUser.id = req.body.id;
   inObjUser.name = req.body.name;
-  inObjUser.password = hash(req.body.password);
+  inObjUser.password = req.body.password?hash(req.body.password):null;
   inObjUser.role = req.body.role;
   inObjUser.ymd_add = req.body.ymd_add;
   inObjUser.id_add = req.body.id_add;
   inObjUser.ymd_upd = tool.getYYYYMMDD(new Date());
   inObjUser.id_upd = req.user.id;
+
+  if ((!req.body.id) || (!req.body.name)) {
+    inObjUser.password = '';
+    res.render("userform", {
+      selectuser: inObjUser,
+      mode: "update",
+    message: "名前は入力してください",
+    });
+    return;
+  }
+
   (async () => {
     const retObjUser = await users.update(inObjUser);
     if (retObjUser.changedRows === 0) {
       res.render("userform", {
-        user: inObjUser,
+        selectuser: inObjUser,
         mode: "update",
         message: "更新対象がすでに削除されています",
       });
@@ -105,7 +128,7 @@ router.post('/update/delete', security.authorize(), function (req, res, next) {
         try {
           const retObjUser_again = await ussers.findPKey(req.body.id);
           res.render("userform", {
-            user: retObjUser_again[0],
+            selectuser: retObjUser_again[0],
             mode: "update",
             message: "削除対象のユーザーは使用されています",
           });
