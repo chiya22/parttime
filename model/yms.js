@@ -27,7 +27,7 @@ const findThreeMonth = async () => {
         const currentYm = tool.getYYYYMMDD(dt).slice(0,6);
         dt.setMonth(dt.getMonth() +1);
         const afterYm1 = tool.getYYYYMMDD(dt).slice(0,6);
-        dt.setMonth(dt.getMonth() +2);
+        dt.setMonth(dt.getMonth() +1);
         const afterYm2 = tool.getYYYYMMDD(dt).slice(0,6);
         const query = "SELECT * FROM yms WHERE (yyyymm = '" + currentYm + "' OR yyyymm = '" + afterYm1 + "' OR yyyymm = '" + afterYm2 + "') ORDER BY yyyymm desc;"
         logger.info(query);
