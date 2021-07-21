@@ -38,6 +38,18 @@ router.get('/update/:id', security.authorize(), (req, res, next) => {
   })();
 });
 
+//パスワード変更画面へ
+router.get('/updatepwd', security.authorize(), (req,res, next) => {
+  (async () => {
+    const retObjUser = await users.findPKey(req.user.id);
+    res.render('userform', {
+      selectuser: retObjUser[0],
+      mode: 'updatepwd',
+      message: null,
+    });
+  })();
+});
+
 //ユーザ情報の登録
 router.post('/insert', security.authorize(), (req, res, next) => {
 
@@ -112,7 +124,12 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
         message: "更新対象がすでに削除されています",
       });
     } else {
-      res.redirect(req.baseUrl);
+      //パスワード変更の場合はトップ画面へ戻る
+      if (req.body.mode === 'updatepwd') {
+        res.redirect('/');
+      } else {
+        res.redirect(req.baseUrl);
+      }
     }
   })();
 });

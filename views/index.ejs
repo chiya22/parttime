@@ -26,12 +26,14 @@
       <% }) %>
     <% } %>
 
-    <% if (user.role === 'admin') { %>
     <div class="btn-footer">
+    <% if (user.role === 'admin') { %>
       <a class="btn-link" href="/users">ユーザ管理</a>
       <a class="btn-link" href="/yms">年月管理</a>
-    </div>
+    <% } else { %>
+      <a class="btn-link-big" href="/users/updatepwd">パスワード変更</a>
     <% } %>
+    </div>
     <% if (locals.user){ %>
       <div class="btn-footer">
         <form method="POST" action="/logout">

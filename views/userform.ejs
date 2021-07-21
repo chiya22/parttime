@@ -29,15 +29,23 @@
         <div><input class="form-item-style" type="password" name="password" placeholder="パスワード" value="<%= value_password %>" required></div> 
         <div><input class="form-item-style" type="text" placeholder="権限" value="<%= value_role %>" name="role"></div>  
         <input class="btn-update" type="button" id="btn_insert" value="登録">
+
       <% } else { %>
         <div><input class="form-item-readonly-style" type="text" name="id" placeholder="ID" value="<%= selectuser.id %>"></div>
-        <div><input class="form-item-style" type="text" name="name" placeholder="名前" value="<%= selectuser.name %>" autofocus required></div>
-        <div><input class="form-item-style" type="password" name="password" placeholder="パスワード" value="" required></div>  
-        <div><input class="form-item-style" type="text" name="role" placeholder="権限" value="<%= selectuser.role %>"></div> 
+        <% if (mode === 'updatepwd') { %>
+          <div><input class="form-item-readonly-style" type="text" name="name" value="<%= selectuser.name %>" readonly></div>
+          <div><input class="form-item-style" type="password" name="password" placeholder="パスワード" value=""></div>  
+          <div><input class="form-item-readonly-style" type="text" name="role" value="<%= selectuser.role %>" readonly></div> 
+        <% } else { %>
+          <div><input class="form-item-style" type="text" name="name" placeholder="名前" value="<%= selectuser.name %>" autofocus required></div>
+          <div><input class="form-item-style" type="password" name="password" placeholder="パスワード" value="" required></div>  
+          <div><input class="form-item-style" type="text" name="role" placeholder="権限" value="<%= selectuser.role %>"></div> 
+        <% } %>
         <input type="hidden" name="ymd_add" value="<%= selectuser.ymd_add %>">
         <input type="hidden" name="id_add" value="<%= selectuser.id_add %>">
         <input type="hidden" name="ymd_upd" value="<%= selectuser.ymd_upd %>">
         <input type="hidden" name="id_upd" value="<%= selectuser.id_upd %>">
+        <input type="hidden" name="mode" value="<%= mode %>">
         <input class="btn-update" type="button" id="btn_update" value="更新">
         <input class="btn-delete" type="button" id="btn_delete" value="削除">
       <% } %>
@@ -45,7 +53,11 @@
       </div>
     </form>
     <div class="btn-footer">
-      <a href="/users" class="btn-link">戻る</a>
+      <% if (mode==='updatepwd') { %>
+        <a href="/" class="btn-link">戻る</a>
+      <% } else { %>
+        <a href="/users" class="btn-link">戻る</a>
+      <% } %>
       <% if (locals.user){ %>
         <form method="POST" action="/logout">
           <input type="submit" class="btn-link" button value="ログアウト" />
@@ -64,7 +76,7 @@
     let updatebtn = document.getElementById("btn_update");
     if (updatebtn) {
       updatebtn.addEventListener("click", () => {
-        document.userform.action = "update";
+        document.userform.action = "/users/update/update";
         document.userform.submit();
       })
     }

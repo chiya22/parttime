@@ -117,6 +117,16 @@ body {
   border-radius: 10px;
   font-size: 12px;
 }
+.btn-link-big {
+  background-color: #004C00;
+  color: #fff;
+  display: inline-block;
+  width: 150px;
+  margin: 10px 5px;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
 .btn-update {
   background-color: #F93115;
   color: #fff;
