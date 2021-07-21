@@ -50,6 +50,15 @@ router.post('/insert', security.authorize(), (req, res, next) => {
   inObjYm.id_upd = req.user.id;
   inObjYm.ymd_upd = tool.getYYYYMMDD(new Date());
 
+  if (!req.body.yyyymm) {
+    res.render("ymform", {
+      ym: inObjYm,
+      mode: "insert",
+      message: "年月は入力してください",
+    });
+    return;
+  }
+
   (async () => {
     try {
       const retObjYm = await yms.insert(inObjYm);
@@ -57,9 +66,9 @@ router.post('/insert', security.authorize(), (req, res, next) => {
     } catch (err) {
       if (err.errno === 1062) {
         res.render("ymform", {
-          user: inObjYm,
+          ym: inObjYm,
           mode: "insert",
-          message: "ユーザー【" + inObjYm.yyyymm + "】はすでに存在しています",
+          message: "年月【" + inObjYm.yyyymm + "】はすでに存在しています",
         });
       } else {
         throw err;
@@ -78,6 +87,7 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
   inObjYm.id_add = req.body.id_add;
   inObjYm.ymd_upd = tool.getYYYYMMDD(new Date());
   inObjYm.id_upd = req.user.id;
+
   (async () => {
     const retObjYm = await yms.update(inObjYm);
     if (retObjYm.changedRows === 0) {
