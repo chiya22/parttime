@@ -33,7 +33,12 @@ const insert = async (inObj) => {
 
 const update = async (inObj) => {
     try {
-        const query = 'update users set name = "' + inObj.name + '", password = "' + inObj.password + '", role = "' + inObj.role + '", ymd_add = "' + inObj.ymd_add + '", id_add = "' + inObj.id_add + '", ymd_upd = "' + inObj.ymd_upd + '", id_upd = "' + inObj.id_upd + '" where id = "' + inObj.id + '"';
+        let query;
+        if (inObj.password) {
+            query = 'update users set name = "' + inObj.name + '", password = "' + inObj.password + '", role = "' + inObj.role + '", ymd_add = "' + inObj.ymd_add + '", id_add = "' + inObj.id_add + '", ymd_upd = "' + inObj.ymd_upd + '", id_upd = "' + inObj.id_upd + '" where id = "' + inObj.id + '"';
+        } else {
+            query = 'update users set name = "' + inObj.name + '", role = "' + inObj.role + '", ymd_add = "' + inObj.ymd_add + '", id_add = "' + inObj.id_add + '", ymd_upd = "' + inObj.ymd_upd + '", id_upd = "' + inObj.id_upd + '" where id = "' + inObj.id + '"';
+        }
         logger.info(query);
         const retObj = await knex.raw(query)
         return retObj[0];
