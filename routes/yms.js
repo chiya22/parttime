@@ -64,8 +64,9 @@ router.post('/insert', security.authorize(), (req, res, next) => {
       const retObjYm = await yms.insert(inObjYm);
       res.redirect(req.baseUrl);
     } catch (err) {
-      if (err.errno === 1062) {
-        res.render("ymform", {
+      // if (err.errno === 1062) {
+      if (err.code === '23505') {
+          res.render("ymform", {
           ym: inObjYm,
           mode: "insert",
           message: "年月【" + inObjYm.yyyymm + "】はすでに存在しています",
@@ -90,8 +91,9 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
 
   (async () => {
     const retObjYm = await yms.update(inObjYm);
-    if (retObjYm.changedRows === 0) {
-      res.render("ymform", {
+    // if (retObjYm.changedRows === 0) {
+    if (retObjYm.rowCount === 0) {
+        res.render("ymform", {
         ym: inObjYm,
         mode: "update",
         message: "更新対象がすでに削除されています",
@@ -109,13 +111,14 @@ router.post('/update/delete', security.authorize(), function (req, res, next) {
       const retObjYm = await yms.remove(req.body.yyyymm);
       res.redirect(req.baseUrl);
     } catch (err) {
-      if (err && err.errno === 1451) {
-        try {
+        // if (err && err.errno === 1451) {
+        if (err && err.code === '23503') {
+            try {
           const retObjYm_again = await yms.findPKey(req.body.yyyymm);
           res.render("ymform", {
             ym: retObjYm_again[0],
             mode: "update",
-            message: "削除対象のユーザーは使用されています",
+            message: "削除対象の年月は使用されています",
           });
         } catch (err) {
           throw err;
@@ -138,10 +141,10 @@ router.get('/download/:ym', security.authorize(), (req, res, next) => {
       csv += row.id_users + ',' + row.name_users + ',' + row.yyyymmdd + ',' + row.kubun + '\r\n'
     });
 
-    const retObjMemos = await memos.findByYyyymmForDownload(req.params.ym);
-    retObjMemos.forEach( (row) => {
-      csv += row.id_users + ',' + row.name_users + ',MEMO,' + row.memo + '\r\n'
-    })
+    // const retObjMemos = await memos.findByYyyymmForDownload(req.params.ym);
+    // retObjMemos.forEach( (row) => {
+    //   csv += row.id_users + ',' + row.name_users + ',MEMO,' + row.memo + '\r\n'
+    // })
 
     res.setHeader('Content-disposition', 'attachment; filename=data.csv');
     res.setHeader('Content-Type', 'text/csv; charset=UTF-8');

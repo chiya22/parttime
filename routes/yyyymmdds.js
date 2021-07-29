@@ -82,8 +82,8 @@ router.post('/update', security.authorize(), (req, res, next) => {
     })
 
     // 既存情報を削除
-    const retObjYyyymmdd = await yyyymmdds.removeByYyyymmAndUserid(req.body.yyyymm[0], req.user.id);
-    const retObjMemo = await memos.remove(req.body.yyyymm[0], req.user.id)
+    const retObjYyyymmdd = await yyyymmdds.removeByYyyymmAndUserid(req.body.yyyymm[0], req.body.target_id_users[0]);
+    const retObjMemo = await memos.remove(req.body.yyyymm[0], req.body.target_id_users[0])
 
     // 新規情報を登録
     req.body.yyyymmdd.map((item, idx) => {
@@ -104,7 +104,7 @@ router.post('/update', security.authorize(), (req, res, next) => {
 
     let inObjMemo = {};
     inObjMemo.yyyymm = req.body.yyyymm[0];
-    inObjMemo.id_users = req.user.id;
+    inObjMemo.id_users = req.body.target_id_users[0];
     inObjMemo.memo = req.body.memo;
     inObjMemo.ymd_add = tool.getYYYYMMDD(new Date());
     inObjMemo.id_add = req.user.id;

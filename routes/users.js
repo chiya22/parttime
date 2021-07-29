@@ -78,7 +78,8 @@ router.post('/insert', security.authorize(), (req, res, next) => {
       const retObjUsers = await users.insert(inObjUser);
       res.redirect(req.baseUrl);
     } catch (err) {
-      if (err.errno === 1062) {
+      // if (err.errno === 1062) {
+      if (err.code === '23505') {
         inObjUser.password = '';
         res.render("userform", {
           selectuser: inObjUser,
@@ -117,11 +118,12 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
 
   (async () => {
     const retObjUser = await users.update(inObjUser);
-    if (retObjUser.changedRows === 0) {
-      res.render("userform", {
+      // if (retObjUser.changedRows === 0) {
+      if (retObjUser.rowCount === 0) {
+          res.render("userform", {
         selectuser: inObjUser,
         mode: "update",
-        message: "更新対象がすでに削除されています",
+        message: "更新対象のユーザーはすでに削除されています",
       });
     } else {
       //パスワード変更の場合はトップ画面へ戻る
@@ -141,8 +143,9 @@ router.post('/update/delete', security.authorize(), function (req, res, next) {
       const retObjUser = await users.remove(req.body.id);
       res.redirect(req.baseUrl);
     } catch (err) {
-      if (err && err.errno === 1451) {
-        try {
+      // if (err && err.errno === 1451) {
+      if (err && err.code === '23503') {
+          try {
           const retObjUser_again = await ussers.findPKey(req.body.id);
           res.render("userform", {
             selectuser: retObjUser_again[0],

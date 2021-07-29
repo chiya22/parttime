@@ -32,7 +32,8 @@ const findThreeMonth = async () => {
         const query = "SELECT * FROM yms WHERE (yyyymm = '" + currentYm + "' OR yyyymm = '" + afterYm1 + "' OR yyyymm = '" + afterYm2 + "') ORDER BY yyyymm desc;"
         logger.info(query);
         const retObj = await knex.raw(query)
-        return retObj[0];
+        return retObj.rows;
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -40,10 +41,11 @@ const findThreeMonth = async () => {
 
 const insert = async (inObj) => {
     try {
-        const query = 'insert into yms values ("' + inObj.yyyymm + '","' + inObj.status + '","' + inObj.ymd_add + '", "' + inObj.id_add + '", "' + inObj.ymd_upd + '", "' + inObj.id_upd + '")';
+        const query = "insert into yms values ('" + inObj.yyyymm + "','" + inObj.status + "','" + inObj.ymd_add + "','" + inObj.id_add + "','" + inObj.ymd_upd + "','" + inObj.id_upd + "')";
         logger.info(query);
         const retObj = await knex.raw(query)
-        return retObj[0];
+        return retObj;
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -51,10 +53,11 @@ const insert = async (inObj) => {
 
 const update = async (inObj) => {
     try {
-        const query = 'update yms set yyyymm = "' + inObj.yyyymm + '", status = "' + inObj.status + '", ymd_add = "' + inObj.ymd_add + '", id_add = "' + inObj.id_add + '", ymd_upd = "' + inObj.ymd_upd + '", id_upd = "' + inObj.id_upd + '" where yyyymm = "' + inObj.yyyymm + '"';
+        const query = "update yms set yyyymm = '" + inObj.yyyymm + "', status = '" + inObj.status + "', ymd_add = '" + inObj.ymd_add + "', id_add = '" + inObj.id_add + "', ymd_upd = '" + inObj.ymd_upd + "', id_upd = '" + inObj.id_upd + "' where yyyymm = '" + inObj.yyyymm + "'";
         logger.info(query);
         const retObj = await knex.raw(query)
-        return retObj[0];
+        return retObj;
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -62,9 +65,10 @@ const update = async (inObj) => {
 
 const remove = async (yyyymm) => {
     try {
-        const query = 'delete from yms where yyyymm = "' + yyyymm + '"';
+        const query = "delete from yms where yyyymm = '" + yyyymm + "'";
         const retObj = await knex.raw(query)
-        return retObj[0];
+        return retObj;
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
