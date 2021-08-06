@@ -24,15 +24,17 @@
         <% const ishaya=yyyymmdd.kubun==='1' ?'checked':''; const isoso=yyyymmdd.kubun==='2' ?'checked':''; const
           ishayaoso=yyyymmdd.kubun==='3' ?'checked':''; const isng=yyyymmdd.kubun==='4' ?'checked':''; %>
             <group class="inline-radio">
-
-              <% if (yyyymmdd.daykubun === '3') { %>
+              <%
+                const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
+              %>
+              <% if (yyyymmdd.daykubun === '0') { %>
                 <div class="row-header row-header-color-holiday">
-              <% } else if (yyyymmdd.daykubun === '2') { %>
+              <% } else if (yyyymmdd.daykubun === '6') { %>
                 <div class="row-header row-header-color-saturday">
               <% } else { %>
                 <div class="row-header row-header-color">
               <% } %>
-                <%= yyyymmdd.yyyymmdd.slice(4,6) %>月<%= yyyymmdd.yyyymmdd.slice(6,8) %>日
+                <%= yyyymmdd.yyyymmdd.slice(4,6) %>月<%= yyyymmdd.yyyymmdd.slice(6,8) %>日(<%= youbi %>)
               </div>
 
               <div class="row-radio">

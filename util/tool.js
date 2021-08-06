@@ -59,12 +59,13 @@ const getDayKubun = (yyyymmdd) => {
   const mm = yyyymmdd.slice(4,6);
   const dd = yyyymmdd.slice(-2);
   const dayofweek = new Date(yyyy + '/' + mm + '/' + dd).getDay();
+
+  // 0→日、1→月、2→火、3→水、4→木、5→金、6→土
+
   if (dayofweek === 0 || holiday.includes(yyyymmdd)) {
-    return '3';
-  } else if (dayofweek === 6) {
-    return '2';
+    return '0';
   } else {
-    return '1';
+    return String(dayofweek);
   }
 }
 //
