@@ -12,6 +12,15 @@
   <div class="main-container">
     <h1 class="main-header"><%= yms.slice(0,4) %>年<%= yms.slice(-2) %>月</h1>
     <ul>
+      <% if (nousers) { %>
+        <%  nousers.forEach( nouser => { %>
+          <li>
+            <div class="btn-disabled">
+              <%= nouser.name_users %>（<%= nouser.id_users %>）
+            </div>
+          </li>
+          <%  }) %>
+      <% } %>
       <% if (users) { %>
       <%  users.forEach( user => { %>
       <li>

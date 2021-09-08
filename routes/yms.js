@@ -156,9 +156,11 @@ router.get('/download/:ym', security.authorize(), (req, res, next) => {
 router.get('/users/:ym', security.authorize(), (req, res, next) => {
   (async () => {
     const retObjYmUser = await yyyymmdds.findByYyyymmGroupByUser(req.params.ym);
+    const retObjYmNoUser = await yyyymmdds.findByYyyymmGroupByNoUser(req.params.ym);
     res.render("ymusers", {
       yms: req.params.ym,
       users: retObjYmUser,
+      nousers: retObjYmNoUser,
     });
   })();
 });

@@ -34,6 +34,18 @@ const findByYyyymmGroupByUser = async (yyyymm) => {
         throw err;
     }
 }
+const findByYyyymmGroupByNoUser = async (yyyymm) => {
+    try {
+        const query = "SELECT u.id as id_users, u.name as name_users FROM users u WHERE u.id NOT IN (SELECT ymd.id_users FROM yyyymmdds ymd WHERE ymd.yyyymm = '" + yyyymm + "') AND u.role != 'admin' ORDER BY u.id asc;"
+        logger.info(query);
+        const retObj = await knex.raw(query);
+        return retObj.rows;
+        // return retObj[0];
+    } catch(err) {
+        throw err;
+    }
+}
+
 
 const findByYyyymmForDownload = async (yyyymm) => {
     try {
@@ -76,6 +88,7 @@ module.exports = {
     findPKey: findPKey,
     findByYyyymmAndUserid: findByYyyymmAndUserid,
     findByYyyymmGroupByUser:findByYyyymmGroupByUser,
+    findByYyyymmGroupByNoUser:findByYyyymmGroupByNoUser,
     findByYyyymmForDownload: findByYyyymmForDownload,
     insert: insert,
     removeByYyyymmAndUserid: removeByYyyymmAndUserid,
