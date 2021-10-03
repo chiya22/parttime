@@ -27,7 +27,7 @@
               <%
                 const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
               %>
-              <% if (yyyymmdd.daykubun === '0') { %>
+              <% if (yyyymmdd.daykubun === '0' || yyyymmdd.isHoliday === '1') { %>
                 <div class="row-header row-header-color-holiday">
               <% } else if (yyyymmdd.daykubun === '6') { %>
                 <div class="row-header row-header-color-saturday">
