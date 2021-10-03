@@ -173,6 +173,7 @@ router.get('/users/:ym/:id_users', security.authorize(), (req, res, next) => {
       let inObj = {};
       inObj = item;
       inObj.daykubun = tool.getDayKubun(item.yyyymmdd);
+      inObj.isHoliday = tool.getHoliday(item.yyyymmdd);
       retObjList.push(inObj);
     });
     

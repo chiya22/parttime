@@ -35,6 +35,7 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
         inObj.ymd_upd = tool.getYYYYMMDD(new Date());
         inObj.id_upd = req.user.id;
         inObj.daykubun = tool.getDayKubun(item);
+        inObj.isHoliday = tool.getHoliday(item);
         retObjList.push(inObj);
       })
     } else {
@@ -43,6 +44,7 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
         let inObj = {};
         inObj = item;
         inObj.daykubun = tool.getDayKubun(item.yyyymmdd);
+        inObj.isHoliday = tool.getHoliday(item.yyyymmdd);
         retObjList.push(inObj);
       });
       retObjMemo = await memos.findPKey(req.params.yyyymm, req.user.id);
@@ -97,6 +99,7 @@ router.post('/update', security.authorize(), (req, res, next) => {
       inObjYyyymmdd.ymd_upd = tool.getYYYYMMDD(new Date());
       inObjYyyymmdd.id_upd = req.user.id;
       inObjYyyymmdd.daykubun = tool.getDayKubun(req.body.yyyymmdd[idx]);
+      inObjYyyymmdd.isHoliday = tool.getHoliday(req.body.yyyymmdd[idx]);
       (async () => {
         await yyyymmdds.insert(inObjYyyymmdd);
       })();

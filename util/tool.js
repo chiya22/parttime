@@ -1,5 +1,16 @@
-// 年月日（yyyymmdd形式）をもとに、日付区分（1->通常日、2->土、3-> 日祝）を返却する
+// 年月日（yyyymmdd形式）をもとに、日付区分（1->通常日、2->土、3-> 日）を返却する
 const getDayKubun = (yyyymmdd) => {
+
+  const yyyy = yyyymmdd.slice(0,4);
+  const mm = yyyymmdd.slice(4,6);
+  const dd = yyyymmdd.slice(-2);
+  const dayofweek = new Date(yyyy + '/' + mm + '/' + dd).getDay();
+
+  // 0→日、1→月、2→火、3→水、4→木、5→金、6→土
+  return String(dayofweek);
+}
+// 年月日（yyyymmdd形式）をもとに、祝日区分（1 -> 祝日、0 -> 祝日以外）
+const getHoliday = (yyyymmdd) => {
   // 2020年から2022年までの祝日
   const holiday = [
     '20200101',
@@ -54,18 +65,12 @@ const getDayKubun = (yyyymmdd) => {
     '20221103',
     '20221123'
   ]
-
-  const yyyy = yyyymmdd.slice(0,4);
-  const mm = yyyymmdd.slice(4,6);
-  const dd = yyyymmdd.slice(-2);
-  const dayofweek = new Date(yyyy + '/' + mm + '/' + dd).getDay();
-
-  // 0→日、1→月、2→火、3→水、4→木、5→金、6→土
-
-  if (dayofweek === 0 || holiday.includes(yyyymmdd)) {
-    return '0';
+  // holday -> 1
+  // not holiday -> 0
+  if (holiday.includes(yyyymmdd)) {
+    return '1';
   } else {
-    return String(dayofweek);
+    return '0';
   }
 }
 //
@@ -97,6 +102,7 @@ const getYyyymmddByYyyymm = (yyyymm) => {
 
 module.exports = {
   getDayKubun,
+  getHoliday,
   getYYYYMMDD,
   getYyyymmddByYyyymm,
 };
