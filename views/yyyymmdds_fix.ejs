@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel='stylesheet' href='/stylesheets/destyle.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+  <title>バイトシフト調整</title>
+</head>
+
+<body>
+  <div class="main-container">
+    <h1 class="main-header">
+      <% if (mode === 'admin') { %>
+        <%= target_yyyymm.slice(0,4) %>年<%= target_yyyymm.slice(4,6) %>月
+      <% } else { %>
+        <%= target_yyyymm.slice(0,4) %>年<%= target_yyyymm.slice(4,6) %>月 <%= target_name_users %>
+      <% } %>
+    </h1>
+    <% if (yyyymmdds) { %>
+    <% yyyymmdds.forEach( yyyymmdd => { %>
+      <div class="row">
+        <group class="inline-radio">
+          <%
+            const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
+          %>
+          <% if (yyyymmdd.daykubun === '0' || yyyymmdd.isHoliday === '1') { %>
+            <div class="row-header row-header-color-holiday">
+          <% } else if (yyyymmdd.daykubun === '6') { %>
+            <div class="row-header row-header-color-saturday">
+          <% } else { %>
+            <div class="row-header row-header-color">
+          <% } %>
+            <%= yyyymmdd.yyyymmdd.slice(4,6) %>月<%= yyyymmdd.yyyymmdd.slice(6,8) %>日(<%= youbi %>)
+          </div>
+          <div class="row-status">
+            <%= yyyymmdd.status %>
+          </div>
+          <div class="row-haya-1">
+            <%= yyyymmdd.nm_users_haya_1 %>
+          </div>
+          <div class="row-haya-2">
+            <%= yyyymmdd.nm_users_haya_2 %>
+          </div>
+          <div class="row-oso-1">
+            <%= yyyymmdd.nm_users_oso_1 %>
+          </div>
+          <div class="row-oso-2">
+            <%= yyyymmdd.nm_users_oso_2 %>
+          </div>
+        </group>
+      </div>
+      <% }) %>
+    <% } %>
+    </div>
+    <div class="btn-footer">
+      <% if (mode === 'admin') { %>
+        <a href="/yms" class="btn-link">戻る</a>
+      <% } else { %>
+        <a href="/" class="btn-link">戻る</a>
+      <% } %>
+      <% if (locals.user){ %>
+      <form method="POST" action="/logout">
+        <input type="submit" class="btn-link" button value="ログアウト" />
+      </form>
+    <% } %>
+    </div>
+</body>
+
+</html>
