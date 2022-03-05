@@ -23,6 +23,9 @@
             <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 (<%= name_status %>)
           </a>
         <% } %>
+        <a href="yms/fix/<%= ym.yyyymm %>">
+          <img class="img-users" src="/images/users.svg">
+        </a>
         <a href="yms/users/<%= ym.yyyymm %>">
           <img class="img-users" src="/images/users.svg">
         </a>
