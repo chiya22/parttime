@@ -25,7 +25,9 @@ const insert = async (inObj) => {
         const query = "insert into users values ('" + inObj.id + "','" + inObj.name + "','" + inObj.password + "','" + inObj.role + "','" + inObj.ymd_add + "','" + inObj.id_add + "','" + inObj.ymd_end + "','" + inObj.id_end + "','" + inObj.ymd_upd + "','" + inObj.id_upd + "')";
         logger.info(query);
         const retObj = await knex.raw(query)
+        // Postgres
         return retObj;
+        // MySql
         // return retObj[0];
     } catch(err) {
         throw err;
@@ -42,7 +44,9 @@ const update = async (inObj) => {
         }
         logger.info(query);
         const retObj = await knex.raw(query)
+        // Postgres
         return retObj;
+        // MySql
         // return retObj[0];
     } catch(err) {
         throw err;
@@ -53,7 +57,9 @@ const remove = async (id) => {
     try {
         const query = "delete from users where id = '" + id + "'";
         const retObj = await knex.raw(query)
+        // Postgres
         return retObj;
+        // MySql
         // return retObj[0];
     } catch(err) {
         throw err;
@@ -61,9 +67,9 @@ const remove = async (id) => {
 };
 
 module.exports = {
-    find: find,
-    findPKey: findPKey,
-    insert: insert,
-    update: update,
-    remove: remove,
+    find,
+    findPKey,
+    insert,
+    update,
+    remove,
 };
