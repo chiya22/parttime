@@ -6,6 +6,7 @@ const security = require('../util/security');
 const yms = require('../model/yms');
 const tool = require('../util/tool');
 const yyyymmdds = require('../model/yyyymmdds');
+const yyyymmdds_fix = require('../model/yyyymmdds_fix');
 const users = require('../model/users');
 const memos = require('../model/memos');
 
@@ -196,7 +197,46 @@ router.get('/users/:ym/:id_users', security.authorize(), (req, res, next) => {
   })();
 });
 
+// 確定情報一覧表示画面へ
+router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
+  (async () => {
 
+    // 確定情報より現在のユーザーが設定されているレコードを取得
+    const retObjYyyymmdd = await yyyymmdds_fix.findByYyyymm(req.params.yyyymm);
+
+    let retObjList = [];
+    if (retObjYyyymmdd.length !== 0) {
+      //　存在する場合
+      retObjYyyymmdd.forEach((item,idx) => {
+        let inObj = {};
+        inObj = item;
+        if ((item.id_users_haya_1) && (item.id_users_oso_1)) {
+          inObj.status = '確定';
+        } else if (item.id_users_haya_1) {
+          inObj.status = '募集中(遅)';
+        } else if (item.id_users_oso_1) {
+          inObj.status = '募集中(早)';
+        } else {
+          inObj.status = '募集中(早遅)';
+        }
+        inObj.daykubun = tool.getDayKubun(item.yyyymmdd);
+        inObj.isHoliday = tool.getHoliday(item.yyyymmdd);
+        retObjList.push(inObj);
+      });
+    }
+
+    // // ユーザー情報を取得
+    // const retObjUser = await users.findPKey(req.user.id);
+
+    res.render("./yyyymmdds_fix", {
+      yyyymmdds: retObjList,
+      target_yyyymm: req.params.yyyymm,
+      // target_name_users: retObjUser[0].name,
+      // target_id_users: req.user.id,
+      mode: 'admin',
+    });
+  })();
+});
 
 
 module.exports = router;
