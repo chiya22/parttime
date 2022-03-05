@@ -32,7 +32,9 @@ const findThreeMonth = async () => {
         const query = "SELECT * FROM yms WHERE (yyyymm = '" + currentYm + "' OR yyyymm = '" + afterYm1 + "' OR yyyymm = '" + afterYm2 + "') ORDER BY yyyymm desc;"
         logger.info(query);
         const retObj = await knex.raw(query)
+        // Postgres
         return retObj.rows;
+        // MySql
         // return retObj[0];
     } catch(err) {
         throw err;
@@ -44,7 +46,9 @@ const insert = async (inObj) => {
         const query = "insert into yms values ('" + inObj.yyyymm + "','" + inObj.status + "','" + inObj.ymd_add + "','" + inObj.id_add + "','" + inObj.ymd_upd + "','" + inObj.id_upd + "')";
         logger.info(query);
         const retObj = await knex.raw(query)
+        // Postgres
         return retObj;
+        // MySql
         // return retObj[0];
     } catch(err) {
         throw err;
@@ -56,7 +60,9 @@ const update = async (inObj) => {
         const query = "update yms set yyyymm = '" + inObj.yyyymm + "', status = '" + inObj.status + "', ymd_add = '" + inObj.ymd_add + "', id_add = '" + inObj.id_add + "', ymd_upd = '" + inObj.ymd_upd + "', id_upd = '" + inObj.id_upd + "' where yyyymm = '" + inObj.yyyymm + "'";
         logger.info(query);
         const retObj = await knex.raw(query)
+        // Postgres
         return retObj;
+        // MySql
         // return retObj[0];
     } catch(err) {
         throw err;
@@ -67,7 +73,9 @@ const remove = async (yyyymm) => {
     try {
         const query = "delete from yms where yyyymm = '" + yyyymm + "'";
         const retObj = await knex.raw(query)
+        // Postgres
         return retObj;
+        // MySql
         // return retObj[0];
     } catch(err) {
         throw err;
@@ -75,10 +83,10 @@ const remove = async (yyyymm) => {
 };
 
 module.exports = {
-    find: find,
-    findPKey: findPKey,
-    findThreeMonth: findThreeMonth,
-    insert: insert,
-    update: update,
-    remove: remove,
+    find,
+    findPKey,
+    findThreeMonth,
+    insert,
+    update,
+    remove,
 };
