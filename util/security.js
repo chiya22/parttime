@@ -2,6 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const hash = require("./hash.js").digest;
 const users = require('../model/users');
+const tool = require("./tool");
 
 const log4js = require("log4js");
 const logger = log4js.configure("./config/log4js-config.json").getLogger();
@@ -32,13 +33,20 @@ passport.use("local-strategy", new LocalStrategy({
                 done(null, false, req.flash("message", "ユーザー名　または　パスワード　が間違っています。"));
             } else {
                 if (retObj[0].password === hash(password)) {
-                    req.session.regenerate((err) => {
-                        if (err) {
-                            done(err);
-                        } else {
-                            done(null, retObj[0]);
-                        }
-                    });
+
+                    const currentYyyymmdd = tool.getYYYYMMDD(new Date());
+
+                    if (currentYyyymmdd > retObj[0].ymd_end) {
+                        done(null, false, req.flash("message", "ユーザー名　または　パスワード　が間違っています。"));
+                    } else {
+                        req.session.regenerate((err) => {
+                            if (err) {
+                                done(err);
+                            } else {
+                                done(null, retObj[0]);
+                            }
+                        });
+                    }
                 } else {
                     done(null, false, req.flash("message", "ユーザー名　または　パスワード　が間違っています。"));
                 }
