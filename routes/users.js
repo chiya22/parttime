@@ -60,6 +60,8 @@ router.post('/insert', security.authorize(), (req, res, next) => {
   inObjUser.role = req.body.role;
   inObjUser.id_add = req.user.id;
   inObjUser.ymd_add = tool.getYYYYMMDD(new Date());
+  inObjUser.id_end = req.user.id;
+  inObjUser.ymd_end = '99991231';
   inObjUser.id_upd = req.user.id;
   inObjUser.ymd_upd = tool.getYYYYMMDD(new Date());
 
@@ -103,6 +105,8 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
   inObjUser.role = req.body.role;
   inObjUser.ymd_add = req.body.ymd_add;
   inObjUser.id_add = req.body.id_add;
+  inObjUser.ymd_end = req.body.ymd_end;
+  inObjUser.id_end = req.body.id_end;
   inObjUser.ymd_upd = tool.getYYYYMMDD(new Date());
   inObjUser.id_upd = req.user.id;
 
