@@ -10,6 +10,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const ymsRouter = require('./routes/yms');
 const yyyymmddsRouter = require('./routes/yyyymmdds');
+const yyyymmddsFixRouter = require('./routes/yyyymmdds_fix');
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/yms', ymsRouter);
 app.use('/yyyymmdds', yyyymmddsRouter);
+app.use('/yyyymmdds_fix', yyyymmddsFixRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
