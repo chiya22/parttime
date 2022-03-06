@@ -17,9 +17,9 @@ const findByYyyymmAndUserid = async (yyyymm, id_users ) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -27,13 +27,13 @@ const findByYyyymmAndUserid = async (yyyymm, id_users ) => {
 
 const findByYyyymmGroupByUser = async (yyyymm) => {
     try {
-        const query = "SELECT a.id_users, b.name AS name_users FROM yyyymmdd a LEFT OUTER JOIN users b ON a.id_users = b.id  WHERE a.yyyymm = '" + yyyymm + "' GROUP BY id_users, b.name ORDER BY a.id_users asc;"
+        const query = "SELECT a.id_users, b.name AS name_users FROM yyyymmdds a LEFT OUTER JOIN users b ON a.id_users = b.id  WHERE a.yyyymm = '" + yyyymm + "' GROUP BY id_users, b.name ORDER BY a.id_users asc;"
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -44,9 +44,9 @@ const findByYyyymmGroupByNoUser = async (yyyymm) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -59,9 +59,9 @@ const findByYyyymmForDownload = async (yyyymm) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -73,9 +73,9 @@ const insert = async (inObj) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -87,9 +87,9 @@ const removeByYyyymmAndUserid = async (yyyymm, id_users) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
