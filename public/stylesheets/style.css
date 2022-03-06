@@ -53,10 +53,11 @@ body {
   border-radius: 10px;
   transition: .3s;
 }
-.btn {
+.btn-kakutei {
   display: block;
-  background-color: #15A82B;
-  color: #fff;
+  background-color: #fff;
+  border: 1px solid #15A82B;
+  color: #15A82B;
   width: 200px;
   margin: 0 auto 10px auto;
   padding: 20px;
@@ -64,32 +65,15 @@ body {
   border-radius: 10px;
   transition: .3s;
 }
-
-.btn-admin {
-  display: inline-block;
-  background-color: #15A82B;
-  color: #fff;
-  width: 200px;
-  margin: 0 auto 10px auto;
-  padding: 20px;
-  text-align: center;
-  border-radius: 10px;
-  transition: .3s;
-}
-.img-download {
-  width: 20px;
-  margin: 0 0 30px 10px;
-}
-.img-users {
-  width: 30px;
-  margin: 0 0 25px 10px;
-}
-
 
 .btn:hover,
+.btn-kakutei:hover,
 .btn-link:hover,
 .btn-update:hover,
-.btn-delete:hover {
+.btn-delete:hover,
+.btn-admin:hover,
+.btn-admin-kakutei:hover,
+.btn-admin-disabled:hover {
   transform: scale(1.1);
 }
 .btn-disabled {
@@ -100,17 +84,6 @@ body {
   margin: 0 auto 10px auto;
   padding: 20px;
   text-align: center;
-  border-radius: 10px;
-}
-.btn-admin-disabled {
-  display: inline-block;
-  background-color: #15A82B;
-  color: #fff;
-  width: 200px;
-  margin: 0 auto 10px auto;
-  padding: 20px;
-  text-align: center;
-  opacity: 0.3;
   border-radius: 10px;
 }
 .btn-footer {
@@ -160,6 +133,58 @@ body {
   font-size: 12px;
   transition: .3s;
 }
+
+.btn-admin {
+  display: inline-block;
+  background-color: #15A82B;
+  color: #fff;
+  width: 300px;
+  margin: 0 auto 10px auto;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  transition: .3s;
+}
+.btn-admin-disabled {
+  display: inline-block;
+  background-color: #15A82B;
+  color: #fff;
+  width: 300px;
+  margin: 0 auto 10px auto;
+  padding: 20px;
+  text-align: center;
+  opacity: 0.3;
+  border-radius: 10px;
+  transition: .3s;
+}
+
+.btn-admin-inner,
+.btn-admin-inner-disabled {
+  margin-top: 10px;
+}
+.btn-inner-setteing,
+.btn-inner-kibou,
+.btn-inner-kakutei,
+.btn-inner-download {
+  display: inline-block;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin:0 3px;
+}
+.btn-inner-setteing:hover,
+.btn-inner-kibou:hover,
+.btn-inner-kakutei:hover,
+.btn-inner-download:hover {
+  background: #fff;
+  color:#15A82B;
+}
+
+.admin-title {
+  font-size:14px;
+}
+
+
 /* .btn-link:hover {
   border: 1px solid #000;
   background-color: #fff;
@@ -293,4 +318,23 @@ body {
   line-height: 32px;
   padding: 10px;
   cursor: pointer; 
+}
+
+.tag-status4 {
+  display: inline;
+  padding:5px 10px;
+  color: #fff;
+  margin-right:5px;
+  left: 250px;
+  background-color:#15A82B;
+  border-radius: 10px;
+}
+.tag-status2 {
+  display: inline;
+  padding: 5px;
+  margin-right:5px;
+  color: #fff;
+  left: 250px;
+  background-color:#F93115;
+  border-radius: 10px;
 }
