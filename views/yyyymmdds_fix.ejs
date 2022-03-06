@@ -20,33 +20,50 @@
     <% if (yyyymmdds) { %>
     <% yyyymmdds.forEach( yyyymmdd => { %>
       <div class="row">
-        <group class="inline-radio">
-          <%
+          <div class="row-header-group">
+            <%
             const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
-          %>
-          <% if (yyyymmdd.daykubun === '0' || yyyymmdd.isHoliday === '1') { %>
-            <div class="row-header row-header-color-holiday">
-          <% } else if (yyyymmdd.daykubun === '6') { %>
-            <div class="row-header row-header-color-saturday">
-          <% } else { %>
-            <div class="row-header row-header-color">
-          <% } %>
-            <%= yyyymmdd.yyyymmdd.slice(4,6) %>月<%= yyyymmdd.yyyymmdd.slice(6,8) %>日(<%= youbi %>)
+            %>
+            <% if (yyyymmdd.daykubun === '0' || yyyymmdd.isHoliday === '1') { %>
+              <div class="row-header-fix row-header-color-holiday">
+            <% } else if (yyyymmdd.daykubun === '6') { %>
+              <div class="row-header-fix row-header-color-saturday">
+            <% } else { %>
+              <div class="row-header-fix row-header-color">
+            <% } %>
+              <%= yyyymmdd.yyyymmdd.slice(4,6) %>月<%= yyyymmdd.yyyymmdd.slice(6,8) %>日(<%= youbi %>)
+            </div>
+            <div class="row-status">
+              <%= yyyymmdd.status %>
+            </div>
           </div>
-          <div class="row-status">
-            <%= yyyymmdd.status %>
+          <div class="row-data-index">
+            <div class="row-haya-1-index">
+              早番1
+            </div>
+            <div class="row-haya-2-index">
+              早番2
+            </div>
+            <div class="row-oso-1-index">
+              遅番1
+            </div>
+            <div class="row-oso-2-index">
+              遅番1
+            </div>
           </div>
-          <div class="row-haya-1">
-            <%= yyyymmdd.nm_users_haya_1 %>
-          </div>
-          <div class="row-haya-2">
-            <%= yyyymmdd.nm_users_haya_2 %>
-          </div>
-          <div class="row-oso-1">
-            <%= yyyymmdd.nm_users_oso_1 %>
-          </div>
-          <div class="row-oso-2">
-            <%= yyyymmdd.nm_users_oso_2 %>
+          <div class="row-data-group">
+            <div class="row-haya-1">
+              <%= yyyymmdd.nm_users_haya_1 %>
+            </div>
+            <div class="row-haya-2">
+              <%= yyyymmdd.nm_users_haya_2 %>
+            </div>
+            <div class="row-oso-1">
+              <%= yyyymmdd.nm_users_oso_1 %>
+            </div>
+            <div class="row-oso-2">
+              <%= yyyymmdd.nm_users_oso_2 %>
+            </div>
           </div>
         </group>
       </div>
