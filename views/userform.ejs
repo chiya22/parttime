@@ -28,6 +28,7 @@
         <div><input class="form-item-style" type="text" name="name" placeholder="名前" value="<%= value_name %>" required></div> 
         <div><input class="form-item-style" type="password" name="password" placeholder="パスワード" value="<%= value_password %>" required></div> 
         <div><input class="form-item-style" type="text" placeholder="権限" value="<%= value_role %>" name="role"></div>  
+        <div><input class="form-item-style" type="text" placeholder="適用終了日" value="99991231" name="ymd_end"></div>  
         <input class="btn-update" type="button" id="btn_insert" value="登録">
 
       <% } else { %>
@@ -36,14 +37,15 @@
           <div><input class="form-item-readonly-style" type="text" name="name" value="<%= selectuser.name %>" readonly></div>
           <div><input class="form-item-style" type="password" name="password" placeholder="パスワード" value=""></div>  
           <div><input class="form-item-readonly-style" type="text" name="role" value="<%= selectuser.role %>" readonly></div> 
+          <div><input class="form-item-readonly-style" type="text" name="ymd_end" value="<%= selectuser.ymd_end %>" readonly></div> 
         <% } else { %>
           <div><input class="form-item-style" type="text" name="name" placeholder="名前" value="<%= selectuser.name %>" autofocus required></div>
           <div><input class="form-item-style" type="password" name="password" placeholder="パスワード" value="" required></div>  
           <div><input class="form-item-style" type="text" name="role" placeholder="権限" value="<%= selectuser.role %>"></div> 
+          <div><input class="form-item-style" type="text" name="ymd_end" placeholder="適用終了日" value="<%= selectuser.ymd_end %>"></div> 
         <% } %>
         <input type="hidden" name="ymd_add" value="<%= selectuser.ymd_add %>">
         <input type="hidden" name="id_add" value="<%= selectuser.id_add %>">
-        <input type="hidden" name="ymd_end" value="<%= selectuser.ymd_end %>">
         <input type="hidden" name="id_end" value="<%= selectuser.id_end %>">
         <input type="hidden" name="ymd_upd" value="<%= selectuser.ymd_upd %>">
         <input type="hidden" name="id_upd" value="<%= selectuser.id_upd %>">
