@@ -12,39 +12,62 @@
   <div class="main-container">
   <% if (yms) { %>
     <%  yms.forEach( ym => { %>
-      <div class="row">
-        <% const name_status=ym.status==='1' ?'未募集':ym.status==='2' ?'募集中':ym.status==='3' ?'募集終了':''; %>
-        <% if (ym.status === '2') { %>
-          <a class="btn-admin" href="yms/update/<%= ym.yyyymm %>">
-          <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 (<%= name_status %>)
-          </a>
+    <div class="row">
+      <% const name_status=ym.status==='1' ?'未募集':ym.status==='2' ?'募集中':ym.status==='3' ?'募集終了':ym.status==='4'?'確定':''; %>
+      <% if (ym.status === '2') { %>
+        <div class="btn-admin">
+          <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
+          <div class="btn-admin-inner">
+            <a class="btn-inner-setteing" href="yms/update/<%= ym.yyyymm %>">設定
+            </a>
+            <a class="btn-inner-kibou" href="yms/users/<%= ym.yyyymm %>">希望
+            </a>
+            <a class="btn-inner-download" href="yms/download/<%= ym.yyyymm %>">ＤＬ
+            </a>
+          </div>
+        </div>
+        <% } else if (ym.status === '4') { %>
+        <div class="btn-admin">
+          <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
+          <div class="btn-admin-inner">
+            <a class="btn-inner-setteing" href="yms/update/<%= ym.yyyymm %>">設定
+            </a>
+            <a class="btn-inner-kibou" href="yms/users/<%= ym.yyyymm %>">希望
+            </a>
+            <a class="btn-inner-kakutei" href="yms/fix/<%= ym.yyyymm %>">確定
+            </a>
+            <a class="btn-inner-download" href="yms/download/<%= ym.yyyymm %>">ＤＬ
+            </a>
+          </div>
+        </div>
         <% } else { %>
-          <a class="btn-admin-disabled" href="yms/update/<%= ym.yyyymm %>">
-            <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 (<%= name_status %>)
-          </a>
+        <div class="btn-admin-disabled">
+          <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
+          <div class="btn-admin-inner-disabled">
+            <a class="btn-inner-setteing" href="yms/update/<%= ym.yyyymm %>">設定
+            </a>
+            <a class="btn-inner-kibou" href="yms/users/<%= ym.yyyymm %>">希望
+            </a>
+            <a class="btn-inner-kakutei" href="yms/fix/<%= ym.yyyymm %>">確定
+            </a>
+            <a class="btn-inner-download" href="yms/download/<%= ym.yyyymm %>">ＤＬ
+            </a>
+          </div>
+        </div>
         <% } %>
-        <a href="yms/fix/<%= ym.yyyymm %>">
-          <img class="img-users" src="/images/users.svg">
-        </a>
-        <a href="yms/users/<%= ym.yyyymm %>">
-          <img class="img-users" src="/images/users.svg">
-        </a>
-        <a href="yms/download/<%= ym.yyyymm %>">
-          <img class="img-download" src="/images/download.svg">
-        </a>
-      </div>
+    </div>
     <%  }) %>
-    <% } %>
-  <div class="btn-footer">
-    <a class="btn-link" href="yms/insert">年月登録</a>
-  </div>
-  <div class="btn-footer">
-    <a href="/" class="btn-link">戻る</a>
-    <% if (locals.user){ %>
-      <form method="POST" action="/logout">
-        <input type="submit" class="btn-link" button value="ログアウト" />
-      </form>
-    <% } %>
+  <% } %>
+    <div class="btn-footer">
+      <a class="btn-link" href="yms/insert">年月登録</a>
+    </div>
+    <div class="btn-footer">
+      <a href="/" class="btn-link">戻る</a>
+      <% if (locals.user){ %>
+        <form method="POST" action="/logout">
+          <input type="submit" class="btn-link" button value="ログアウト" />
+        </form>
+      <% } %>
     </div>
   </div>
 </body>
