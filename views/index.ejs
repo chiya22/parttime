@@ -16,13 +16,15 @@
           <% const name_status=ym.status==='1' ?'未募集':ym.status==='2' ?'募集中':ym.status==='3' ?'募集終了':ym.status==='4' ?'確定':''; %>
           <% if (ym.status === '2') { %>
             <a class="btn" href="yyyymmdds/<%= ym.yyyymm %>">
-            <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(4,6) %>月 <%= name_status %>
+            <p class="tag-status2"><%= name_status %></p>
+            <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(4,6) %>月
             </a>
           <% } else if(ym.status ==='4') { %>
-            <a class="btn" href="yyyymmdds_fix/<%= ym.yyyymm %>">
-              <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(4,6) %>月 <%= name_status %>
+            <a class="btn-kakutei" href="yyyymmdds_fix/<%= ym.yyyymm %>">
+              <p class="tag-status4"><%= name_status %></p>
+              <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(4,6) %>月
               </a>
-          <% } else { %>
+              <% } else { %>
             <div class="btn-disabled">
               <%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(4,6) %>月 <%= name_status %>
             </div>
