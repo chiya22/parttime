@@ -27,17 +27,19 @@
         <input id="status1" type="radio" name="status" value="1" checked /><label for="status1">未募集</label>
         <input id="status2" type="radio" name="status" value="2" /><label for="status2">募集中</label>
         <input id="status3" type="radio" name="status" value="3" /><label for="status3">募集終了</label>
+        <input id="status4" type="radio" name="status" value="4" /><label for="status4">確定</label>
       </div>
       <input class="btn-update" type="button" id="btn_insert" value="登録">
       <% } else { %>
       <% const ismi = ym.status==='1' ?'checked':''; const ischu = ym.status==='2' ?'checked':''; const
-      iszumi=ym.status==='3' ?'checked':''; %>
+      iszumi=ym.status==='3' ?'checked':'';const iskakutei=ym.status==='4'?'checked':''; %>
       <div><p class="main-header"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(4,6) %>月</p></div>
       <input type="hidden" name="yyyymm" value="<%= ym.yyyymm %>">
       <div class="yms-radio">
         <input id="status4" type="radio" name="status" value="1" <%= ismi %> /><label for="status4">未募集</label>
         <input id="status5" type="radio" name="status" value="2" <%= ischu %> /><label for="status5">募集中</label>
         <input id="status6" type="radio" name="status" value="3" <%= iszumi %> /><label for="status6">募集終了</label>
+        <input id="status7" type="radio" name="status" value="4" <%= iskakutei %> /><label for="status7">確定</label>
       </div>
       <input type="hidden" name="ymd_add" value="<%= user.ymd_add %>">
       <input type="hidden" name="id_add" value="<%= user.id_add %>">
