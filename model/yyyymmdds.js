@@ -17,9 +17,9 @@ const findByYyyymmAndUserid = async (yyyymm, id_users ) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        // return retObj.rows;
+        return retObj.rows;
         // MySql
-        return retObj[0];
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -31,9 +31,9 @@ const findByYyyymmGroupByUser = async (yyyymm) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        // return retObj.rows;
+        return retObj.rows;
         // MySql
-        return retObj[0];
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -44,9 +44,9 @@ const findByYyyymmGroupByNoUser = async (yyyymm) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        // return retObj.rows;
+        return retObj.rows;
         // MySql
-        return retObj[0];
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -59,9 +59,9 @@ const findByYyyymmForDownload = async (yyyymm) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        // return retObj.rows;
+        return retObj.rows;
         // MySql
-        return retObj[0];
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -73,9 +73,9 @@ const insert = async (inObj) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        // return retObj;
+        return retObj;
         // MySql
-        return retObj[0];
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -87,9 +87,9 @@ const removeByYyyymmAndUserid = async (yyyymm, id_users) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        // return retObj;
+        return retObj;
         // MySql
-        return retObj[0];
+        // return retObj[0];
     } catch(err) {
         throw err;
     }
