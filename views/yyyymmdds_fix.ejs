@@ -19,53 +19,62 @@
     </h1>
     <% if (yyyymmdds) { %>
     <% yyyymmdds.forEach( yyyymmdd => { %>
-      <div class="row">
-          <div class="row-header-group">
-            <%
-            const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
-            %>
+      <div class="row-kakutei">
+        <%
+        const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
+        %>
+        <div class="row-left">
+          <div class="row-left-top">
             <% if (yyyymmdd.daykubun === '0' || yyyymmdd.isHoliday === '1') { %>
-              <div class="row-header-fix row-header-color-holiday">
+              <div class="row-header-color-holiday">
             <% } else if (yyyymmdd.daykubun === '6') { %>
-              <div class="row-header-fix row-header-color-saturday">
+              <div class="row-header-color-saturday">
             <% } else { %>
-              <div class="row-header-fix row-header-color">
+              <div class="row-header-color">
             <% } %>
               <%= yyyymmdd.yyyymmdd.slice(4,6) %>月<%= yyyymmdd.yyyymmdd.slice(6,8) %>日(<%= youbi %>)
             </div>
-            <div class="row-status">
-              <%= yyyymmdd.status %>
+          </div>
+          <div class="row-left-under">
+            <%= yyyymmdd.status %>
+          </div>
+        </div>
+        <div class="row-right">
+          <div class="row-right-top">
+            <div class="row-right-top-left">
+              <img class="img-icon-haya" src="/images/haya.svg">
+            </div>
+            <div class="row-right-top-right">
+              <% if (yyyymmdd.id_users_haya_1 === target_id_users) { %>
+                <span class="row-active"><%= yyyymmdd.nm_users_haya_1 %></span>
+              <% } else { %>
+                <span class="row-nonactive"><%= yyyymmdd.nm_users_haya_1 %></span>
+              <% } %>
+              <% if (yyyymmdd.id_users_haya_2 === target_id_users) { %>
+                <span class="row-active"><%= yyyymmdd.nm_users_haya_2 %></span>
+              <% } else { %>
+                <span class="row-nonactive"><%= yyyymmdd.nm_users_haya_2 %></span>
+              <% } %>
             </div>
           </div>
-          <div class="row-data-index">
-            <div class="row-haya-1-index">
-              早番1
+          <div class="row-right-under">
+            <div class="row-right-under-left">
+              <img class="img-icon-oso" src="/images/oso.svg">
             </div>
-            <div class="row-haya-2-index">
-              早番2
-            </div>
-            <div class="row-oso-1-index">
-              遅番1
-            </div>
-            <div class="row-oso-2-index">
-              遅番1
-            </div>
-          </div>
-          <div class="row-data-group">
-            <div class="row-haya-1">
-              <%= yyyymmdd.nm_users_haya_1 %>
-            </div>
-            <div class="row-haya-2">
-              <%= yyyymmdd.nm_users_haya_2 %>
-            </div>
-            <div class="row-oso-1">
-              <%= yyyymmdd.nm_users_oso_1 %>
-            </div>
-            <div class="row-oso-2">
-              <%= yyyymmdd.nm_users_oso_2 %>
+            <div class="row-right-under-right">
+              <% if (yyyymmdd.id_users_oso_1 === target_id_users) { %>
+                <span class="row-active"><%= yyyymmdd.nm_users_oso_1 %></span>
+              <% } else { %>
+                <span class="row-nonactive"><%= yyyymmdd.nm_users_oso_1 %></span>
+              <% } %>
+              <% if (yyyymmdd.id_users_oso_2 === target_id_users) { %>
+                <span class="row-active"><%= yyyymmdd.nm_users_oso_2 %></span>
+              <% } else { %>
+                <span class="row-nonactive"><%= yyyymmdd.nm_users_oso_2 %></span>
+              <% } %>
             </div>
           </div>
-        </group>
+        </div>
       </div>
       <% }) %>
     <% } %>

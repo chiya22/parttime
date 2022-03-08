@@ -197,7 +197,7 @@ router.get('/users/:ym/:id_users', security.authorize(), (req, res, next) => {
   })();
 });
 
-// 確定情報一覧表示画面へ
+// 管理画面から確定情報一覧表示画面へ
 router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
   (async () => {
 
@@ -219,6 +219,14 @@ router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
         } else {
           inObj.status = '募集中(早遅)';
         }
+        if (!item.id_users_haya_1) {
+          inObj.id_users_haya_1 = '募集中'
+          inObj.nm_users_haya_1 = '募集中'
+        }
+        if (!item.id_users_oso_1) {
+          inObj.id_users_oso_1 = '募集中'
+          inObj.nm_users_oso_1 = '募集中'
+        }
         inObj.daykubun = tool.getDayKubun(item.yyyymmdd);
         inObj.isHoliday = tool.getHoliday(item.yyyymmdd);
         retObjList.push(inObj);
@@ -232,7 +240,7 @@ router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
       yyyymmdds: retObjList,
       target_yyyymm: req.params.yyyymm,
       // target_name_users: retObjUser[0].name,
-      // target_id_users: req.user.id,
+      target_id_users: req.user.id,
       mode: 'admin',
     });
   })();

@@ -27,11 +27,36 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
           inObj.status = '確定';
         } else if (item.id_users_haya_1) {
           inObj.status = '募集中(遅)';
+          // 早番の設定値をマスキング
+          if ((item.id_users_haya_1 !== req.user.id) && (item.id_users_haya_2 !== req.user.id)) {
+            inObj.nm_users_haya_1 = '*****'
+            if (inObj.nm_users_haya_2) {
+              inObj.nm_users_haya_2 = '*****'
+            }
+          }
         } else if (item.id_users_oso_1) {
           inObj.status = '募集中(早)';
+          // 遅番の設定値をマスキング
+          if ((item.id_users_oso_1 !== req.user.id) && (item.id_users_oso_2 !== req.user.id)) {
+            inObj.nm_users_oso_1 = '*****'
+            if (inObj.nm_users_oso_2) {
+              inObj.nm_users_oso_2 = '*****'
+            }
+          }
         } else {
           inObj.status = '募集中(早遅)';
         }
+        
+        // 募集中を設定する
+        if (!item.id_users_haya_1) {
+          inObj.id_users_haya_1 = '募集中'
+          inObj.nm_users_haya_1 = '募集中'
+        }
+        if (!item.id_users_oso_1) {
+          inObj.id_users_oso_1 = '募集中'
+          inObj.nm_users_oso_1 = '募集中'
+        }
+        
         inObj.daykubun = tool.getDayKubun(item.yyyymmdd);
         inObj.isHoliday = tool.getHoliday(item.yyyymmdd);
         retObjList.push(inObj);
