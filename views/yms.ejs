@@ -26,20 +26,6 @@
             </a>
           </div>
         </div>
-        <% } else if (ym.status === '4') { %>
-        <div class="btn-admin">
-          <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
-          <div class="btn-admin-inner">
-            <a class="btn-inner-setteing" href="yms/update/<%= ym.yyyymm %>">設定
-            </a>
-            <a class="btn-inner-kibou" href="yms/users/<%= ym.yyyymm %>">希望
-            </a>
-            <a class="btn-inner-kakutei" href="yms/fix/<%= ym.yyyymm %>">確定
-            </a>
-            <a class="btn-inner-download" href="yms/download/<%= ym.yyyymm %>">ＤＬ
-            </a>
-          </div>
-        </div>
         <% } else { %>
         <div class="btn-admin-disabled">
           <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
