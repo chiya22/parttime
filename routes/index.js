@@ -3,6 +3,20 @@ const router = express.Router();
 const security = require('../util/security');
 const yms = require('../model/yms');
 const users = require('../model/users');
+const fs = require("fs");
+const tool = require("../util/tool")
+const yyyymmdd_fix = require("../model/yyyymmdds_fix");
+
+const multer = require('multer')
+const storage = multer.diskStorage({
+  destination: (req,file,cb) => {
+    cb(null,"public/uploads/")
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  }
+})
+const upload = multer({ storage: storage});
 
 /* GET home page. */
 router.get('/', security.authorize(), (req, res, next)=> {
@@ -29,5 +43,45 @@ router.post("/logout", (req, res) => {
   req.logout();
   res.redirect("/login");
 });
+
+//確定情報アップロード
+router.get("/upload", security.authorize(), (req,res) => {
+  res.render("upload", {
+    msg: null,
+  })
+});
+
+//
+router.post("/upload", security.authorize(), upload.single("file"), (req,res) => {
+  (async () => {
+    const filecontent = fs.readFileSync(req.file.path, 'utf-8');
+    const lines = filecontent.split("\r\n");
+
+    //既存データを削除
+    await yyyymmdd_fix.removeByYyyymm(lines[0].slice(0,6));
+
+    const aaa = lines.length;
+    //ファイルを読込データを登録
+    for (let i=0; i<lines.length; i++) {
+  
+      if (lines[i]) {
+        let items = lines[i].split(",");
+        let inObj = {};
+        inObj.yyyymmdd = items[0];
+        inObj.yyyymm = items[1];
+        inObj.id_users_haya_1 = items[2];
+        inObj.id_users_haya_2 = items[3];
+        inObj.id_users_oso_1 = items[4];
+        inObj.id_users_oso_2 = items[5];
+        inObj.ymd_add = tool.getYYYYMMDD(new Date());
+        inObj.id_add = req.user.id;
+        await yyyymmdd_fix.insert(inObj);
+      }
+    }
+    res.render("upload", {
+      msg: req.file.originalname + 'ファイルのアップロードが完了しました',
+    })
+  })();
+})
 
 module.exports = router;

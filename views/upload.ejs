@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel='stylesheet' href='/stylesheets/destyle.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+  <title>バイトシフト調整</title>
+</head>
+
+<body>
+  <div class="main-container">
+    <div class="upload-main">
+      <% if (msg) { %>
+        <div class="msg"><%= msg %></div>
+      <% } %>
+      <form action="/upload" method="POST" enctype="multipart/form-data">
+        <div class="attachment">
+          <label><input type="file" name="file" class="fileinput">ファイルを添付する</label>
+          <span class="filename">選択されていません</span>
+        </div>
+        <button class="btn-update" type="submit">送信</button>
+      </form>
+    </div>
+    <div class="btn-footer">
+      <a href="/" class="btn-link">戻る</a>
+      <% if (locals.user){ %>
+        <form method="POST" action="/logout">
+          <input type="submit" class="btn-link" button value="ログアウト" />
+        </form>
+      <% } %>
+    </div>
+  </div>
+</body>
+<script>
+  const fileObj = document.getElementsByClassName("fileinput")[0];
+  fileObj.addEventListener("change", () => {
+    document.getElementsByClassName("filename")[0].innerHTML = fileObj.files[0].name;
+  })
+</script>
+
+</html>

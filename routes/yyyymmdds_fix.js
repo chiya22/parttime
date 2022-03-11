@@ -25,26 +25,27 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
         inObj = item;
         if ((item.id_users_haya_1) && (item.id_users_oso_1)) {
           inObj.status = '確定';
+        } else if ((!item.id_users_haya_1) && (!item.id_users_oso_1)) {
+          inObj.status = '募集中(早遅)';
         } else if (item.id_users_haya_1) {
           inObj.status = '募集中(遅)';
           // 早番の設定値をマスキング
           if ((item.id_users_haya_1 !== req.user.id) && (item.id_users_haya_2 !== req.user.id)) {
             inObj.nm_users_haya_1 = '*****'
-            if (inObj.nm_users_haya_2) {
+            if (inObj.id_users_haya_2) {
               inObj.nm_users_haya_2 = '*****'
             }
           }
-        } else if (item.id_users_oso_1) {
+        } else {
           inObj.status = '募集中(早)';
           // 遅番の設定値をマスキング
           if ((item.id_users_oso_1 !== req.user.id) && (item.id_users_oso_2 !== req.user.id)) {
             inObj.nm_users_oso_1 = '*****'
-            if (inObj.nm_users_oso_2) {
+            if (inObj.id_users_oso_2) {
               inObj.nm_users_oso_2 = '*****'
             }
           }
-        } else {
-          inObj.status = '募集中(早遅)';
+
         }
         
         // 募集中を設定する
