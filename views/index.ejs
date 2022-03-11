@@ -11,6 +11,7 @@
 <body>
   <div class="main-container">
     <h1 class="main-header"><%= user.name %></h1>
+    <% if (user.role !== 'admin') { %>
     <% if (yms) { %>
         <% yms.forEach( ym => { %>
           <% const name_status=ym.status==='1' ?'未募集':ym.status==='2' ?'募集中':ym.status==='3' ?'募集終了':ym.status==='4' ?'確定':''; %>
@@ -31,11 +32,13 @@
           <% } %>
       <% }) %>
     <% } %>
+    <% } %>
 
     <div class="btn-footer">
     <% if (user.role === 'admin') { %>
       <a class="btn-link" href="/users">ユーザ管理</a>
       <a class="btn-link" href="/yms">年月管理</a>
+      <a class="btn-link" href="/upload">確定ＵＬ</a>
     <% } else { %>
       <a class="btn-link-big" href="/users/updatepwd">パスワード変更</a>
     <% } %>
