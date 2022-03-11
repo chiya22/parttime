@@ -1,3 +1,7 @@
+const returnvalue = (value) => {
+  return (value ? "'" + value + "'" : null);
+};
+
 // 年月日（yyyymmdd形式）をもとに、日付区分（1->通常日、2->土、3-> 日）を返却する
 const getDayKubun = (yyyymmdd) => {
 
@@ -101,6 +105,7 @@ const getYyyymmddByYyyymm = (yyyymm) => {
 
 
 module.exports = {
+  returnvalue,
   getDayKubun,
   getHoliday,
   getYYYYMMDD,
