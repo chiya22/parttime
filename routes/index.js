@@ -8,15 +8,7 @@ const tool = require("../util/tool")
 const yyyymmdd_fix = require("../model/yyyymmdds_fix");
 
 const multer = require('multer')
-const storage = multer.diskStorage({
-  destination: (req,file,cb) => {
-    cb(null,"public/uploads/")
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname)
-  }
-})
-const upload = multer({ storage: storage});
+const upload = multer({ storage: multer.memoryStorage() }).single('file');
 
 /* GET home page. */
 router.get('/', security.authorize(), (req, res, next)=> {
@@ -52,10 +44,10 @@ router.get("/upload", security.authorize(), (req,res) => {
 });
 
 //
-router.post("/upload", security.authorize(), upload.single("file"), (req,res) => {
-  (async () => {
-    const filecontent = fs.readFileSync(req.file.path, 'utf-8');
-    const lines = filecontent.split("\r\n");
+router.post("/upload", security.authorize(), upload, (req,res) => {
+    (async () => {
+      console.log(req.file.buffer.toString());
+      const lines = req.file.buffer.toString().split('\r\n');
 
     //既存データを削除
     await yyyymmdd_fix.removeByYyyymm(lines[0].slice(0,6));
