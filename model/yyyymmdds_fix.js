@@ -30,7 +30,7 @@ const findByYyyymm = async (yyyymm) => {
 const findByYyyymmAndUserid = async (yyyymm, id_users ) => {
     try {
         // 対象年月の中で、募集中のレコード（早番、遅番が確定していない）、または、自分が早番か遅番に設定されているレコード
-        const query1 = "SELECT aa.* from yyyymmdds_fix aa WHERE ((aa.id_users_haya_1 IS NULL AND aa.id_users_haya_2 IS NULL) OR (aa.id_users_oso_1 IS NULL AND aa.id_users_oso_2 IS NULL)) OR (aa.id_users_haya_1 = '" + id_users + "' OR aa.id_users_haya_2 = '" + id_users + "' OR aa.id_users_oso_1 = '" + id_users + "' OR aa.id_users_oso_2 = '" + id_users + "') AND aa.yyyymm = '" + yyyymm + "'"
+        const query1 = "SELECT aa.* from yyyymmdds_fix aa WHERE ((aa.id_users_haya_1 IS NULL AND aa.id_users_haya_2 IS NULL) OR (aa.id_users_oso_1 IS NULL AND aa.id_users_oso_2 IS NULL) OR (aa.id_users_haya_1 = '" + id_users + "' OR aa.id_users_haya_2 = '" + id_users + "' OR aa.id_users_oso_1 = '" + id_users + "' OR aa.id_users_oso_2 = '" + id_users + "')) AND aa.yyyymm = '" + yyyymm + "'"
         const query = "SELECT a.*, b.name as nm_users_haya_1, c.name as nm_users_haya_2, d.name as nm_users_oso_1, e.name as nm_users_oso_2 FROM (" + query1 + ") a LEFT OUTER JOIN users b ON a.id_users_haya_1 = b.id LEFT OUTER JOIN users c ON a.id_users_haya_2 = c.id LEFT OUTER JOIN users d ON a.id_users_oso_1 = d.id LEFT OUTER JOIN users e ON a.id_users_oso_2 = e.id ORDER BY a.yyyymmdd ASC;"
         logger.info(query);
         const retObj = await knex.raw(query);
