@@ -37,29 +37,27 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
           }
         } else if (item.role_users_haya_1 !== 'admin') {
           inObj.status = '募集中(遅)';
-          // 早番の設定値をマスキング
-          if ((item.id_users_haya_1 !== req.user.id) && (item.id_users_haya_2 !== req.user.id)) {
+          // マスキング
+          if ((item.id_users_haya_1 !== req.user.id) && (item.id_users_haya_2 !== req.user.id) && (item.id_users_oso_2 !== req.user.id)) {
             inObj.nm_users_haya_1 = '*****'
             if (inObj.id_users_haya_2) {
               inObj.nm_users_haya_2 = '*****'
             }
-          }
-          // 遅番のサブが現在のユーザー以外の場合はマスキングする
-          if ((item.id_users_oso_2) && (item.id_users_oso_2 !== req.user.id)) {
-            inObj.nm_users_oso_2 = '*****'
+            if (item.id_users_oso_2) {
+              inObj.nm_users_oso_2 = '*****'
+            }
           }
         } else {
           inObj.status = '募集中(早)';
-          // 遅番の設定値をマスキング
-          if ((item.id_users_oso_1 !== req.user.id) && (item.id_users_oso_2 !== req.user.id)) {
+          // マスキング
+          if ((item.id_users_oso_1 !== req.user.id) && (item.id_users_oso_2 !== req.user.id) && (item.id_user_haya_2 !== req.user.id)) {
             inObj.nm_users_oso_1 = '*****'
             if (inObj.id_users_oso_2) {
               inObj.nm_users_oso_2 = '*****'
             }
-          }
-          // 早番のサブが現在のユーザー以外の場合はマスキングする
-          if ((item.id_users_haya_2) && (item.id_users_haya_2 !== req.user.id)) {
-            inObj.nm_users_haya_2 = '*****'
+            if (item.id_users_haya_2) {
+              inObj.nm_users_haya_2 = '*****'
+            }
           }
         }
         
