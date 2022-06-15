@@ -14,9 +14,15 @@
       <% if (users) { %>
       <%  users.forEach( user => { %>
       <li>
-        <a class="btn" href="users/update/<%= user.id %>">
-          <%= user.name %>（<%= user.id %>）
-        </a>
+        <% if (user.ymd_end === '99991231') { %>
+          <a class="btn" href="users/update/<%= user.id %>">
+            <%= user.name %>（<%= user.id %>）
+          </a>
+        <% } else { %>
+          <a class="btn-end" href="users/update/<%= user.id %>">
+            <%= user.name %>（<%= user.id %>）
+          </a>
+        <% } %>
       </li>
       <%  }) %>
       <% } %>
