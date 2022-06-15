@@ -53,6 +53,17 @@ body {
   border-radius: 10px;
   transition: .3s;
 }
+.btn-end {
+  display: block;
+  background-color: #c0c0c0;
+  color: #000;
+  width: 200px;
+  margin: 0 auto 10px auto;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  transition: .3s;
+}
 .btn-kakutei {
   display: block;
   background-color: #fff;
@@ -67,6 +78,7 @@ body {
 }
 
 .btn:hover,
+.btn-end:hover,
 .btn-kakutei:hover,
 .btn-link:hover,
 .btn-update:hover,
@@ -137,6 +149,17 @@ body {
 .btn-admin {
   display: inline-block;
   background-color: #15A82B;
+  color: #fff;
+  width: 300px;
+  margin: 0 auto 10px auto;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  transition: .3s;
+}
+.btn-admin-kakutei {
+  display: inline-block;
+  background-color: #6fb495;
   color: #fff;
   width: 300px;
   margin: 0 auto 10px auto;
