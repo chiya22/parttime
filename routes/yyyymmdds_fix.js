@@ -15,7 +15,7 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
   (async () => {
 
     // 確定情報より現在のユーザーが設定されているレコードを取得
-    const retObjYyyymmdd = await yyyymmdds_fix.findByYyyymmAndUserid(req.params.yyyymm, req.user.id);
+    const retObjYyyymmdd = await yyyymmdds_fix.findByYyyymm(req.params.yyyymm, req.user.id);
 
     let retObjList = [];
     if (retObjYyyymmdd.length !== 0) {
@@ -23,11 +23,11 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
       retObjYyyymmdd.forEach((item,idx) => {
         let inObj = {};
         inObj = item;
-        if ((item.id_users_haya_1) && (item.id_users_oso_1)) {
+        if ((item.role_users_haya_1 !== 'admin') && (item.role_users_oso_1 !== 'admin')) {
           inObj.status = '確定';
-        } else if ((!item.id_users_haya_1) && (!item.id_users_oso_1)) {
+        } else if ((item.role_users_haya_1 === 'admin') && (item.role_users_oso_1 === 'admin')) {
           inObj.status = '募集中(早遅)';
-        } else if (item.id_users_haya_1) {
+        } else if (item.role_users_haya_1 !== 'admin') {
           inObj.status = '募集中(遅)';
           // 早番の設定値をマスキング
           if ((item.id_users_haya_1 !== req.user.id) && (item.id_users_haya_2 !== req.user.id)) {
@@ -45,7 +45,6 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
               inObj.nm_users_oso_2 = '*****'
             }
           }
-
         }
         
         // 募集中を設定する
@@ -60,7 +59,17 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
         
         inObj.daykubun = tool.getDayKubun(item.yyyymmdd);
         inObj.isHoliday = tool.getHoliday(item.yyyymmdd);
-        retObjList.push(inObj);
+
+        if ((inObj.status === '募集中(早遅)') || (inObj.status === '募集中(早)') || (inObj.status === '募集中(遅)')) {
+          // 募集中の場合
+          retObjList.push(inObj);
+        } else {
+          // 確定の場合
+          // 現在のユーザーが設定されている日付である場合のみ
+          if ((item.id_users_haya_1 === req.user.id) || (item.id_users_haya_2 === req.user.id) || (item.id_users_oso_1 === req.user.id) || (item.id_users_oso_2 === req.user.id)) {
+            retObjList.push(inObj);
+          }
+        }
       });
     }
 

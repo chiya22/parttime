@@ -210,15 +210,17 @@ router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
       retObjYyyymmdd.forEach((item,idx) => {
         let inObj = {};
         inObj = item;
-        if ((item.id_users_haya_1) && (item.id_users_oso_1)) {
+
+        if ((item.role_users_haya_1 !== 'admin') && (item.role_users_oso_1 !== 'admin')) {
           inObj.status = '確定';
-        } else if (item.id_users_haya_1) {
-          inObj.status = '募集中(遅)';
-        } else if (item.id_users_oso_1) {
-          inObj.status = '募集中(早)';
-        } else {
+        } else if ((item.role_users_haya_1 === 'admin') && (item.role_users_oso_1 === 'admin')) {
           inObj.status = '募集中(早遅)';
+        } else if (item.role_users_haya_1 !== 'admin') {
+          inObj.status = '募集中(遅)';
+        } else {
+          inObj.status = '募集中(早)';
         }
+
         if (!item.id_users_haya_1) {
           inObj.id_users_haya_1 = '募集中'
           inObj.nm_users_haya_1 = '募集中'
