@@ -141,29 +141,29 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
 });
 
 //ユーザ情報の削除
-router.post('/update/delete', security.authorize(), function (req, res, next) {
-  (async () => {
-    try {
-      const retObjUser = await users.remove(req.body.id);
-      res.redirect(req.baseUrl);
-    } catch (err) {
-      // if (err && err.errno === 1451) {
-      if (err && err.code === '23503') {
-          try {
-          const retObjUser_again = await ussers.findPKey(req.body.id);
-          res.render("userform", {
-            selectuser: retObjUser_again[0],
-            mode: "update",
-            message: "削除対象のユーザーは使用されています",
-          });
-        } catch (err) {
-          throw err;
-        }
-      } else {
-        throw err;
-      }
-    }
-  })();
-});
+// router.post('/update/delete', security.authorize(), function (req, res, next) {
+//   (async () => {
+//     try {
+//       const retObjUser = await users.remove(req.body.id);
+//       res.redirect(req.baseUrl);
+//     } catch (err) {
+//       // if (err && err.errno === 1451) {
+//       if (err && err.code === '23503') {
+//           try {
+//           const retObjUser_again = await ussers.findPKey(req.body.id);
+//           res.render("userform", {
+//             selectuser: retObjUser_again[0],
+//             mode: "update",
+//             message: "削除対象のユーザーは使用されています",
+//           });
+//         } catch (err) {
+//           throw err;
+//         }
+//       } else {
+//         throw err;
+//       }
+//     }
+//   })();
+// });
 
 module.exports = router;
