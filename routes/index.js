@@ -46,7 +46,14 @@ router.get("/upload", security.authorize(), (req,res) => {
 //
 router.post("/upload", security.authorize(), upload, (req,res) => {
     (async () => {
-      console.log(req.file.buffer.toString());
+
+      if (!req.file) {
+        res.render("upload", {
+          msg: 'ファイルを選択してください。',
+        })
+        return;
+      }
+      const filename = req.file.originalname;
       const lines = req.file.buffer.toString().split('\r\n');
 
     //既存データを削除
