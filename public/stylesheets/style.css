@@ -188,11 +188,11 @@ body {
 .btn-inner-kibou,
 .btn-inner-kakutei,
 .btn-inner-download {
-  display: inline-block;
+  display: block;
   border: 1px solid #fff;
   border-radius: 10px;
-  padding: 5px 10px;
-  margin:0 3px;
+  padding: 8px 10px 5px 10px;
+  margin:0 3px 10px 0;
 }
 .btn-inner-setteing:hover,
 .btn-inner-kibou:hover,
