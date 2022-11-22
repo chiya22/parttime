@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel='stylesheet' href='/stylesheets/destyle.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, user-scalable=yes">
+  <title>バイトシフト調整</title>
+</head>
+
+<body>
+  <div class="area-selectuser" id="area-selectuser">
+      <div class="area-selectuser-body">
+        <select class="user-select" name="id">
+          <option value="" selected></option>
+          <% selectuserlist.forEach(function(user) { %>
+          <option value="<%= user.id %>"><%= user.name %></option>
+          <% }) %>
+        </select>
+        <button id="btn_ok" class="btn-link-small">変更</button>
+        <button id="btn_cancel" class="btn-link-small">キャンセル</button>
+        <input type="hidden" id="targetField" value="" />
+      </div>
+    </div>
+    <div class="main-container">
+    <%
+    const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
+    %>
+    <% if (yyyymmdd.daykubun === '0' || yyyymmdd.isHoliday === '1') { %>
+      <h1 class="main-header row-header-color-holiday">
+    <% } else if (yyyymmdd.daykubun === '6') { %>
+      <h1 class="main-header row-header-color-saturday">
+    <% } else { %>
+      <h1 class="main-header row-header-color">
+    <% } %>
+      <%= target_yyyymmdd.slice(0,4) %>年<%= target_yyyymmdd.slice(4,6) %>月<%= target_yyyymmdd.slice(6,8) %>日(<%= youbi %>)
+    </h1>
+    <!-- メッセージ -->
+    <% if (flashMessages) { %>
+      <% if (flashMessages.success) { %>
+        <div class="flashes">
+          <div class="flash success"><%= flashMessages.success %></div>
+        </div>
+      <% } else if (flashMessages.error) { %>
+        <div class="flashes">
+          <div class="flash error"><%= flashMessages.error %></div>
+        </div>
+      <% } %>
+    <% } %>
+    <% if (yyyymmdd) { %>
+      <form name="updateform" action="." method="POST">
+        <div>
+          <div class="row-form">
+            <div><img class="img-icon-haya" src="/images/haya.svg"></div>
+            <div id="nm_users_haya_1" class="row-form-text"><%= yyyymmdd.nm_users_haya_1 %></div>
+            <div><input type="button" id="btn_haya_1" class="btn-small" value="変更" /></div>
+          </div>
+          <div class="row-form">
+            <div><img class="img-icon-haya" src="/images/haya.svg"></div>
+            <% if (yyyymmdd.nm_users_haya_2) { %>
+              <div id="nm_users_haya_2" class="row-form-text"><%= yyyymmdd.nm_users_haya_2 %></div>
+            <% } else { %>
+              <div id="nm_users_haya_2" class="row-form-text"></div>
+            <% } %>
+            <div><input type="button" id="btn_haya_2" class="btn-small" value="変更" /></div>
+          </div>
+          <div class="row-form">
+            <div><img class="img-icon-oso" src="/images/oso.svg"></div>
+            <div id="nm_users_oso_1" class="row-form-text"><%= yyyymmdd.nm_users_oso_1 %></div>
+            <div><input type="button" id="btn_oso_1" class="btn-small" value="変更" /></div>
+          </div>
+          <div class="row-form">
+            <div><img class="img-icon-oso" src="/images/oso.svg"></div>
+            <% if (yyyymmdd.nm_users_oso_2) { %>
+              <div id="nm_users_oso_2" class="row-form-text"><%= yyyymmdd.nm_users_oso_2 %></div>
+            <% } else { %>
+              <div id="nm_users_oso_2" class="row-form-text"></div>
+            <% } %>
+            <div><input type="button" id="btn_oso_2" class="btn-small" value="変更" /></div>
+          </div>
+          <div class="row-form">
+            <input type="hidden" name="yyyymmdd" value="<%= yyyymmdd.yyyymmdd %>" />
+            <input type="hidden" name="id_users_haya_1" id="id_users_haya_1" value="<%= yyyymmdd.id_users_haya_1 %>" />
+            <input type="hidden" name="id_users_haya_2" id="id_users_haya_2" value="<%= yyyymmdd.id_users_haya_2 %>" />
+            <input type="hidden" name="id_users_oso_1" id="id_users_oso_1" value="<%= yyyymmdd.id_users_oso_1 %>" />
+            <input type="hidden" name="id_users_oso_2" id="id_users_oso_2" value="<%= yyyymmdd.id_users_oso_2 %>" />
+            <input type="submit" class="btn-update" value="確定" />
+          </div>
+        </div>
+      </form>
+    <% } %>
+    <div class="btn-footer">
+      <a href="/yms/fix/<%= target_yyyymmdd.slice(0,6) %>" class="btn-link">戻る</a>
+      <% if (locals.user){ %>
+        <form method="POST" action="/logout">
+          <input type="submit" class="btn-link" button value="ログアウト" />
+        </form>
+      <% } %>
+    </div>
+    <script>
+      // 早1
+      const btn_haya_1 = document.getElementById("btn_haya_1")
+      const id_users_haya_1 = document.getElementById("id_users_haya_1")
+      const nm_users_haya_1 = document.getElementById("nm_users_haya_1")
+      // 早2
+      const btn_haya_2 = document.getElementById("btn_haya_2")
+      const id_users_haya_2 = document.getElementById("id_users_haya_2")
+      const nm_users_haya_2 = document.getElementById("nm_users_haya_2")
+      // 遅1
+      const btn_oso_1 = document.getElementById("btn_oso_1")
+      const id_users_oso_1 = document.getElementById("id_users_oso_1")
+      const nm_users_oso_1 = document.getElementById("nm_users_oso_1")
+      // 遅2
+      const btn_oso_2 = document.getElementById("btn_oso_2")
+      const id_users_oso_2 = document.getElementById("id_users_oso_2")
+      const nm_users_oso_2 = document.getElementById("nm_users_oso_2")
+      // ユーザー選択画面
+      const area_selectuser = document.getElementById("area-selectuser")
+      // ユーザー選択画面の変更ボタン
+      const btn_ok = document.getElementById("btn_ok")
+      // ユーザー選択画面のキャンセルボタン
+      const btn_cancel = document.getElementById("btn_cancel")
+      // 変更対象フィールド名
+      const targetField = document.getElementById("targetField");
+
+      if (btn_haya_1) {
+        btn_haya_1.addEventListener('click', () => {
+          targetField.value = "haya_1";
+          area_selectuser.style.visibility = "visible";
+        });
+      }
+      if (btn_haya_2) {
+        btn_haya_2.addEventListener('click', () => {
+          targetField.value = "haya_2";
+          area_selectuser.style.visibility = "visible";
+        });
+      }
+      if (btn_oso_1) {
+        btn_oso_1.addEventListener('click', () => {
+          targetField.value = "oso_1";
+          area_selectuser.style.visibility = "visible";
+        });
+      }
+      if (btn_oso_2) {
+        btn_oso_2.addEventListener('click', () => {
+          targetField.value = "oso_2";
+          area_selectuser.style.visibility = "visible";
+        });
+      }
+      btn_cancel.addEventListener('click', () => {
+        targetField.value = "";
+        area_selectuser.style.visibility = "hidden";
+      });
+      btn_ok.addEventListener('click', () => {
+        const userselect = document.getElementsByName("id")[0];
+        const id_select = userselect.value;
+        const nm_select = userselect.options[userselect.selectedIndex].innerHTML;
+        if (targetField.value === "haya_1") {
+          id_users_haya_1.value = id_select;
+          nm_users_haya_1.innerHTML = nm_select;
+        } else if (targetField.value === "haya_2") {
+          id_users_haya_2.value = id_select;
+          nm_users_haya_2.innerHTML = nm_select;
+        } else if (targetField.value === "oso_1") {
+          id_users_oso_1.value = id_select;
+          nm_users_oso_1.innerHTML = nm_select;
+        } else if (targetField.value === "oso_2") {
+          id_users_oso_2.value = id_select;
+          nm_users_oso_2.innerHTML = nm_select;
+        }
+        area_selectuser.style.visibility = "hidden";
+      });
+    </script>
+</body>
+
+</html>
