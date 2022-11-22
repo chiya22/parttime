@@ -14,47 +14,35 @@
     <%  yms.forEach( ym => { %>
     <div class="row">
       <% const name_status=ym.status==='1' ?'未募集':ym.status==='2' ?'募集中':ym.status==='3' ?'募集終了':ym.status==='4'?'確定':''; %>
-      <% if (ym.status === '2') { %>
-        <div class="btn-admin">
-          <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
-          <div class="btn-admin-inner">
-            <a class="btn-inner-setteing" href="yms/update/<%= ym.yyyymm %>">設定
-            </a>
-            <a class="btn-inner-kibou" href="yms/users/<%= ym.yyyymm %>">シフト希望情報確認
-            </a>
-            <a class="btn-inner-download" href="yms/download/<%= ym.yyyymm %>">シフト希望情報ダウンロード
-            </a>
-          </div>
-        </div>
-      <% } else if (ym.status === '4') { %>
-        <div class="btn-admin-kakutei">
-          <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
-          <div class="btn-admin-inner">
-            <a class="btn-inner-setteing" href="yms/update/<%= ym.yyyymm %>">設定
-            </a>
-            <a class="btn-inner-kibou" href="yms/users/<%= ym.yyyymm %>">シフト希望情報確認
-            </a>
-            <a class="btn-inner-download" href="yms/download/<%= ym.yyyymm %>">シフト希望情報ダウンロード
-            </a>
-            <a class="btn-inner-kakutei" href="yms/fix/<%= ym.yyyymm %>">シフト確定情報確認
-            </a>
-          </div>
-        </div>
-      <% } else { %>
-        <div class="btn-admin-disabled">
-          <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
-          <div class="btn-admin-inner-disabled">
-            <a class="btn-inner-setteing" href="yms/update/<%= ym.yyyymm %>">設定
-            </a>
-            <a class="btn-inner-kibou" href="yms/users/<%= ym.yyyymm %>">シフト希望情報確認
-            </a>
-            <a class="btn-inner-download" href="yms/download/<%= ym.yyyymm %>">シフト希望情報ダウンロード
-            </a>
-            <a class="btn-inner-kakutei" href="yms/fix/<%= ym.yyyymm %>">シフト確定情報確認
-            </a>
-          </div>
-        </div>
+        <% if (ym.status === '3') { %>
+          <div class="btn-admin-disabled">
+        <% } else if (ym.status === '4') { %>
+          <div class="btn-admin-kakutei">
+        <% } else { %>
+          <div class="btn-admin">
         <% } %>
+          <p class="admin-title"><%= ym.yyyymm.slice(0,4) %>年<%= ym.yyyymm.slice(-2) %>月 ( <%= name_status %> )</p>
+          <div class="btn-admin-inner">
+            <a class="btn-inner-setting" href="yms/<%= ym.yyyymm %>">設定
+            </a>
+            <% if (ym.status !== '1') { %>
+              <a class="btn-inner-kibou" href="yms/users/<%= ym.yyyymm %>">希望　確認
+            </a>
+              <a class="btn-inner-download" href="yms/download/<%= ym.yyyymm %>">希望　ダウンロード
+            </a>
+            <% } %>
+            <% if ((ym.status === '3') || (ym.status === '4')) { %>
+              <a class="btn-inner-kakutei" href="yms/fixupload/<%= ym.yyyymm %>">確定　アップロード
+            </a>
+              <a class="btn-inner-kakutei" href="yms/fix/<%= ym.yyyymm %>">確定　確認
+            </a>
+            <% } %>
+            <% if (ym.status === '4') { %>
+              <a class="btn-inner-download" href="yms/fixdownload/<%= ym.yyyymm %>">確定　ダウンロード
+            </a>
+            <% } %>
+          </div>
+        </div>
     </div>
     <%  }) %>
   <% } %>
