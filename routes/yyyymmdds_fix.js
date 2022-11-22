@@ -100,4 +100,51 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
   })();
 });
 
+// 指定された年月日の確定情報を取得
+router.get('/update/:yyyymmdd', security.authorize(), (req, res, next) => {
+  (async () => {
+
+    const yyyymmdd = req.params.yyyymmdd;
+    
+    const retObjYyyymmdd = await yyyymmdds_fix.findByYyyymmdd(yyyymmdd);
+    const retObjUserList = await users.findSelectUser(tool.getYYYYMMDD(new Date()));
+
+    retObjYyyymmdd[0].daykubun = tool.getDayKubun(yyyymmdd);
+    retObjYyyymmdd[0].isHoliday = tool.getHoliday(yyyymmdd);
+    res.render("./yyyymmddform", {
+      yyyymmdd: retObjYyyymmdd[0],
+      target_yyyymmdd: yyyymmdd,
+      selectuserlist: retObjUserList,
+      message: null,
+    });
+  })();
+});
+
+// 指定された年月日の確定情報を更新
+router.post('/update', security.authorize(), (req, res, next) => {
+  (async () => {
+
+    const id_users_haya_1 = req.body.id_users_haya_1;
+    const id_users_haya_2 = req.body.id_users_haya_2;
+    const id_users_oso_1 = req.body.id_users_oso_1;
+    const id_users_oso_2 = req.body.id_users_oso_2;
+    const yyyymmdd = req.body.yyyymmdd;
+
+    if ((id_users_haya_1 === '') || (id_users_oso_1 === '')) {
+
+      req.flash("error", "『早1』と『遅1』は必ず設定してください");
+      res.redirect("/yyyymmdds_fix/update/" + yyyymmdd);
+
+    } else {
+
+      // 対象年月日の確定情報を更新
+      const retObjYyyymmdds_fix = await yyyymmdds_fix.update(yyyymmdd, id_users_haya_1,id_users_haya_2,id_users_oso_1, id_users_oso_2, tool.getYYYYMMDD(new Date()), req.user.id)
+      req.flash("success", `更新しました。${yyyymmdd.slice(0,4)}年${yyyymmdd.slice(4,6)}月${yyyymmdd.slice(6,8)}日`);
+      res.redirect("/yms/fix/" + yyyymmdd.slice(0,6));
+    }
+
+  })();
+});
+
+
 module.exports = router;
