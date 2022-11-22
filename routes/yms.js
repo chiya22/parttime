@@ -4,11 +4,15 @@ const router = express.Router();
 const security = require('../util/security');
 
 const yms = require('../model/yms');
-const tool = require('../util/tool');
 const yyyymmdds = require('../model/yyyymmdds');
 const yyyymmdds_fix = require('../model/yyyymmdds_fix');
 const users = require('../model/users');
 const memos = require('../model/memos');
+
+const tool = require('../util/tool');
+
+const multer = require('multer')
+const upload = multer({ storage: multer.memoryStorage() }).single('file');
 
 // TOPページ
 router.get('/', security.authorize(), (req, res, next) => {
@@ -20,23 +24,21 @@ router.get('/', security.authorize(), (req, res, next) => {
   })();
 });
 
-// メニューから登録画面（ymForm）へ
+// 年月情報の新規登録画面（ymForm）へ
 router.get('/insert', security.authorize(), (req, res, next) => {
   res.render('ymform', {
     ym: null,
     mode: 'insert',
-    message: null,
   });
 });
 
-//年月を指定して更新画面（ymForm）へ
-router.get('/update/:ym', security.authorize(), (req, res, next) => {
+//年月情報の更新画面（ymForm）へ
+router.get('/:ym', security.authorize(), (req, res, next) => {
   (async () => {
     const retObjYm = await yms.findPKey(req.params.ym);
     res.render('ymform', {
       ym: retObjYm[0],
       mode: 'update',
-      message: null,
     });
   })();
 });
@@ -52,36 +54,28 @@ router.post('/insert', security.authorize(), (req, res, next) => {
   inObjYm.ymd_upd = tool.getYYYYMMDD(new Date());
 
   if (!req.body.yyyymm) {
-    res.render("ymform", {
-      ym: inObjYm,
-      mode: "insert",
-      message: "年月は入力してください",
-    });
-    return;
-  }
-
-  (async () => {
-    try {
-      const retObjYm = await yms.insert(inObjYm);
-      res.redirect(req.baseUrl);
-    } catch (err) {
-      // if (err.errno === 1062) {
-      if (err.code === '23505') {
-          res.render("ymform", {
-          ym: inObjYm,
-          mode: "insert",
-          message: "年月【" + inObjYm.yyyymm + "】はすでに存在しています",
-        });
-      } else {
-        throw err;
+    req.flash("error","年月は必ず入力してください");
+    res.redirect("/yms/insert");
+  } else {
+    (async () => {
+      try {
+        const retObjYm = await yms.insert(inObjYm);
+        res.redirect(req.baseUrl);
+      } catch (err) {
+        // if (err.errno === 1062) {
+        if (err.code === '23505') {
+          req.flash("error","年月【" + inObjYm.yyyymm + "】はすでに存在しています");
+          res.redirect("/yms/insert");
+        } else {
+          throw err;
+        }
       }
-    }
-  })();
-
+    })();
+  }
 });
 
 //年月情報の更新
-router.post('/update/update', security.authorize(), (req, res, next) => {
+router.post('/update', security.authorize(), (req, res, next) => {
   let inObjYm = {};
   inObjYm.yyyymm = req.body.yyyymm;
   inObjYm.status = req.body.status;
@@ -94,11 +88,8 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
     const retObjYm = await yms.update(inObjYm);
     // if (retObjYm.changedRows === 0) {
     if (retObjYm.rowCount === 0) {
-        res.render("ymform", {
-        ym: inObjYm,
-        mode: "update",
-        message: "更新対象がすでに削除されています",
-      });
+      req.flash("error","更新対象がすでに削除されています");
+      res.redirect("/yms/update");
     } else {
       res.redirect(req.baseUrl);
     }
@@ -106,21 +97,17 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
 });
 
 //年月情報の削除
-router.post('/update/delete', security.authorize(), function (req, res, next) {
+router.post('/delete', security.authorize(), function (req, res, next) {
   (async () => {
     try {
       const retObjYm = await yms.remove(req.body.yyyymm);
       res.redirect(req.baseUrl);
     } catch (err) {
-        // if (err && err.errno === 1451) {
-        if (err && err.code === '23503') {
-            try {
-          const retObjYm_again = await yms.findPKey(req.body.yyyymm);
-          res.render("ymform", {
-            ym: retObjYm_again[0],
-            mode: "update",
-            message: "削除対象の年月は使用されています",
-          });
+      // if (err && err.errno === 1451) {
+      if (err && err.code === '23503') {
+        try {
+          req.flash("error","削除対象の年月は使用されています");
+          res.redirect("/yms/update/delete");
         } catch (err) {
           throw err;
         }
@@ -131,29 +118,7 @@ router.post('/update/delete', security.authorize(), function (req, res, next) {
   })();
 });
 
-//対象年月のシフト情報をダウンロード
-router.get('/download/:ym', security.authorize(), (req, res, next) => {
-
-  let csv = '';
-
-  (async () => {
-    const retObjYyyymmdds = await yyyymmdds.findByYyyymmForDownload(req.params.ym);
-    retObjYyyymmdds.forEach( (row) => {
-      csv += row.id_users + ',' + row.name_users + ',' + row.yyyymmdd + ',' + row.kubun + '\r\n'
-    });
-
-    // const retObjMemos = await memos.findByYyyymmForDownload(req.params.ym);
-    // retObjMemos.forEach( (row) => {
-    //   csv += row.id_users + ',' + row.name_users + ',MEMO,' + row.memo + '\r\n'
-    // })
-
-    res.setHeader('Content-disposition', 'attachment; filename=data.csv');
-    res.setHeader('Content-Type', 'text/csv; charset=UTF-8');
-  
-    res.send(csv);
-  })();
-});
-
+//対象年月の希望情報のユーザー提示状況一覧を確認する
 router.get('/users/:ym', security.authorize(), (req, res, next) => {
   (async () => {
     const retObjYmUser = await yyyymmdds.findByYyyymmGroupByUser(req.params.ym);
@@ -166,6 +131,7 @@ router.get('/users/:ym', security.authorize(), (req, res, next) => {
   })();
 });
 
+//対象年月の対象ユーザーの希望情報を確認する
 router.get('/users/:ym/:id_users', security.authorize(), (req, res, next) => {
   (async () => {
     const retObjYyyymmdd = await yyyymmdds.findByYyyymmAndUserid(req.params.ym, req.params.id_users);
@@ -197,7 +163,90 @@ router.get('/users/:ym/:id_users', security.authorize(), (req, res, next) => {
   })();
 });
 
-// 管理画面から確定情報一覧表示画面へ
+//対象年月の希望情報をダウンロード
+router.get('/download/:ym', security.authorize(), (req, res, next) => {
+
+  let csv = '';
+
+  (async () => {
+    const retObjYyyymmdds = await yyyymmdds.findByYyyymmForDownload(req.params.ym);
+    retObjYyyymmdds.forEach( (row) => {
+      csv += row.id_users + ',' + row.name_users + ',' + row.yyyymmdd + ',' + row.kubun + '\r\n'
+    });
+
+    // const retObjMemos = await memos.findByYyyymmForDownload(req.params.ym);
+    // retObjMemos.forEach( (row) => {
+    //   csv += row.id_users + ',' + row.name_users + ',MEMO,' + row.memo + '\r\n'
+    // })
+
+    res.setHeader('Content-disposition', 'attachment; filename=data.csv');
+    res.setHeader('Content-Type', 'text/csv; charset=UTF-8');
+  
+    res.send(csv);
+  })();
+});
+
+//対象年月の確定情報アップロード画面へ遷移する
+router.get("/fixupload/:ym", security.authorize(), (req,res) => {
+  res.render("upload", {
+    msg: null,
+    targetYyyymm: req.params.ym
+  })
+});
+
+//対象年月の確定情報をアップロード
+router.post('/fixupload', security.authorize(), upload, (req, res) => {
+  (async () => {
+
+    if (!req.file) {
+      res.render("upload", {
+        msg: 'ファイルを選択してください。',
+        targetYyyymm: req.body.targetYyyymm
+      })
+      return;
+    }
+    // const filename = req.file.originalname;
+    const lines = req.file.buffer.toString().split('\r\n');
+
+    // 対象年月とアップロードされた確定情報の年月が不一致の場合
+    if (lines[0].slice(0,6) !== req.body.targetYyyymm) {
+      res.render("upload", {
+        msg: `アップロードしたファイルの年月が誤っています。${lines[0].slice(0,6)}`,
+        targetYyyymm: req.body.targetYyyymm
+      })
+      return;
+    }
+
+    //既存データを削除
+    await yyyymmdds_fix.removeByYyyymm(lines[0].slice(0,6));
+
+    //ファイルを読込データを登録
+    for (let i=0; i<lines.length; i++) {
+  
+      if (lines[i]) {
+        let items = lines[i].split(",");
+        let inObj = {};
+        inObj.yyyymmdd = items[0];
+        inObj.yyyymm = items[1];
+        inObj.id_users_haya_1 = items[2];
+        inObj.id_users_haya_2 = items[3];
+        inObj.id_users_oso_1 = items[4];
+        inObj.id_users_oso_2 = items[5];
+        inObj.ymd_add = tool.getYYYYMMDD(new Date());
+        inObj.id_add = req.user.id;
+        await yyyymmdds_fix.insert(inObj);
+      }
+    }
+
+    res.render("upload", {
+      msg: req.file.originalname + 'ファイルのアップロードが完了しました',
+      targetYyyymm: req.body.targetYyyymm
+    })
+
+  })();
+});
+
+//対象年月の確定情報表示画面へ
 router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
   (async () => {
 
@@ -245,6 +294,29 @@ router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
       target_id_users: req.user.id,
       mode: 'admin',
     });
+  })();
+});
+
+//対象年月の確定情報をダウンロード
+router.get('/fixdownload/:ym', security.authorize(), (req, res, next) => {
+
+  let csv = '';
+
+  (async () => {
+    const retObjYyyymmdds_fix = await yyyymmdds_fix.findByYyyymmForDownload(req.params.ym);
+    retObjYyyymmdds_fix.forEach( (row) => {
+      csv += row.yyyymmdd + ',' + row.yyyymm + ',' + (row.id_users_haya_1?row.id_users_haya_1:'') + ',' + (row.id_users_haya_2?row.id_users_haya_2:'') + ',' + (row.id_users_oso_1?row.id_users_oso_1:'') + ',' + (row.id_users_oso_2?row.id_users_oso_2:'') + '\r\n'
+    });
+
+    // const retObjMemos = await memos.findByYyyymmForDownload(req.params.ym);
+    // retObjMemos.forEach( (row) => {
+    //   csv += row.id_users + ',' + row.name_users + ',MEMO,' + row.memo + '\r\n'
+    // })
+
+    res.setHeader('Content-disposition', 'attachment; filename=data_fix.csv');
+    res.setHeader('Content-Type', 'text/csv; charset=UTF-8');
+  
+    res.send(csv);
   })();
 });
 
