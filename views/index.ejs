@@ -11,6 +11,18 @@
 <body>
   <div class="main-container">
     <h1 class="main-header"><%= user.name %></h1>
+    <!-- メッセージ -->
+    <% if (flashMessages) { %>
+      <% if (flashMessages.success) { %>
+        <div class="flashes">
+          <div class="flash success"><%= flashMessages.success %></div>
+        </div>
+      <% } else if (flashMessages.error) { %>
+        <div class="flashes">
+          <div class="flash error"><%= flashMessages.error %></div>
+        </div>
+      <% } %>
+    <% } %>
     <% if (user.role !== 'admin') { %>
     <% if (yms) { %>
         <% yms.forEach( ym => { %>
@@ -38,9 +50,8 @@
     <% if (user.role === 'admin') { %>
       <a class="btn-link" href="/users">ユーザ管理</a>
       <a class="btn-link" href="/yms">年月管理</a>
-      <a class="btn-link" href="/upload">確定ＵＬ</a>
     <% } else { %>
-      <a class="btn-link-big" href="/users/updatepwd">パスワード変更</a>
+      <a class="btn-link-big" href="/users/updatepwd/<%= user.id %>">パスワード変更</a>
     <% } %>
     </div>
     <% if (locals.user){ %>
