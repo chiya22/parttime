@@ -17,12 +17,28 @@
         <%= target_yyyymm.slice(0,4) %>年<%= target_yyyymm.slice(4,6) %>月 <%= target_name_users %>
       <% } %>
     </h1>
+    <!-- メッセージ -->
+    <% if (flashMessages) { %>
+      <% if (flashMessages.success) { %>
+        <div class="flashes">
+          <div class="flash success"><%= flashMessages.success %></div>
+        </div>
+      <% } else if (flashMessages.error) { %>
+        <div class="flashes">
+          <div class="flash error"><%= flashMessages.error %></div>
+        </div>
+      <% } %>
+    <% } %>
     <% if (yyyymmdds) { %>
     <% yyyymmdds.forEach( yyyymmdd => { %>
-      <div class="row-kakutei">
-        <%
-        const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
-        %>
+      <% if (mode === 'admin') { %>
+        <a href="/yyyymmdds_fix/update/<%= yyyymmdd.yyyymmdd %>" class="row-kakutei">
+      <% } else { %>
+        <div class="row-kakutei">
+      <% } %>
+      <%
+      const youbi = yyyymmdd.daykubun==='0'?'日':yyyymmdd.daykubun==='1'?'月':yyyymmdd.daykubun==='2'?'火':yyyymmdd.daykubun==='3'?'水':yyyymmdd.daykubun==='4'?'木':yyyymmdd.daykubun==='5'?'金':yyyymmdd.daykubun==='6'?'土':'';
+      %>
         <div class="row-left">
           <div class="row-left-top">
             <% if (yyyymmdd.daykubun === '0' || yyyymmdd.isHoliday === '1') { %>
@@ -75,7 +91,11 @@
             </div>
           </div>
         </div>
-      </div>
+        <% if (mode === 'admin') { %>
+          </a>
+        <% } else { %>
+          </div>
+        <% } %>
       <% }) %>
     <% } %>
     </div>
