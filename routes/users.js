@@ -22,30 +22,27 @@ router.get('/insert', security.authorize(), (req, res, next) => {
   res.render('userform', {
     selectuser: null,
     mode: 'insert',
-    message: null,
   });
 });
 
 //ユーザIDを指定して更新画面（usersForm）へ
-router.get('/update/:id', security.authorize(), (req, res, next) => {
+router.get('/:id', security.authorize(), (req, res, next) => {
   (async () => {
     const retObjUser = await users.findPKey(req.params.id);
     res.render('userform', {
       selectuser: retObjUser[0],
       mode: 'update',
-      message: null,
     });
   })();
 });
 
 //パスワード変更画面へ
-router.get('/updatepwd', security.authorize(), (req,res, next) => {
+router.get('/updatepwd/:id', security.authorize(), (req,res, next) => {
   (async () => {
-    const retObjUser = await users.findPKey(req.user.id);
+    const retObjUser = await users.findPKey(req.params.id);
     res.render('userform', {
       selectuser: retObjUser[0],
       mode: 'updatepwd',
-      message: null,
     });
   })();
 });
@@ -66,38 +63,29 @@ router.post('/insert', security.authorize(), (req, res, next) => {
   inObjUser.ymd_upd = tool.getYYYYMMDD(new Date());
 
   if ((!req.body.id) || (!req.body.name) || (!req.body.password)) {
-    inObjUser.password = '';
-    res.render("userform", {
-      selectuser: inObjUser,
-      mode: "insert",
-    message: "ID、名前、パスワードはすべて入力してください",
-    });
+    req.flash("error","ID、名前、パスワードはすべて入力してください");
+    res.redirect("/users/insert");
     return;
-  }
-
-  (async () => {
-    try {
-      const retObjUsers = await users.insert(inObjUser);
-      res.redirect(req.baseUrl);
-    } catch (err) {
-      // if (err.errno === 1062) {
-      if (err.code === '23505') {
-        inObjUser.password = '';
-        res.render("userform", {
-          selectuser: inObjUser,
-          mode: "insert",
-          message: "ユーザー【" + inObjUser.id + "】はすでに存在しています",
-        });
-      } else {
-        throw err;
+  } else {
+    (async () => {
+      try {
+        const retObjUsers = await users.insert(inObjUser);
+        res.redirect(req.baseUrl);
+      } catch (err) {
+        // if (err.errno === 1062) {
+        if (err.code === '23505') {
+          req.flash("error","ユーザー【" + inObjUser.id + "】はすでに存在しています");
+          res.redirect("/users/insert");
+        } else {
+          throw err;
+        }
       }
-    }
-  })();
-
+    })();
+  }
 });
 
-//ユーザ情報の更新
-router.post('/update/update', security.authorize(), (req, res, next) => {
+//ユーザ情報の更新（パスワードの更新もこちらの処理で行う）
+router.post('/update', security.authorize(), (req, res, next) => {
   let inObjUser = {};
   inObjUser.id = req.body.id;
   inObjUser.name = req.body.name;
@@ -111,33 +99,25 @@ router.post('/update/update', security.authorize(), (req, res, next) => {
   inObjUser.id_upd = req.user.id;
 
   if ((!req.body.id) || (!req.body.name)) {
-    inObjUser.password = '';
-    res.render("userform", {
-      selectuser: inObjUser,
-      mode: "update",
-    message: "名前は入力してください",
-    });
-    return;
-  }
-
-  (async () => {
-    const retObjUser = await users.update(inObjUser);
+    req.flash("error","名前は入力してください");
+    res.redirect("/users/update");
+  } else {
+    (async () => {
+      const retObjUser = await users.update(inObjUser);
       // if (retObjUser.changedRows === 0) {
       if (retObjUser.rowCount === 0) {
-          res.render("userform", {
-        selectuser: inObjUser,
-        mode: "update",
-        message: "更新対象のユーザーはすでに削除されています",
-      });
-    } else {
-      //パスワード変更の場合はトップ画面へ戻る
-      if (req.body.mode === 'updatepwd') {
-        res.redirect('/');
+        req.flash("error","更新対象のユーザーはすでに削除されています");
+        res.redirect("/users/update");
       } else {
-        res.redirect(req.baseUrl);
+        //パスワード変更の場合はトップ画面へ戻る
+        if (req.body.mode === 'updatepwd') {
+          res.redirect('/');
+        } else {
+          res.redirect(req.baseUrl);
+        }
       }
-    }
-  })();
+    })();
+  }
 });
 
 //ユーザ情報の削除
