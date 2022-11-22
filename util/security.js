@@ -32,6 +32,8 @@ passport.use("local-strategy", new LocalStrategy({
             if (retObj.length === 0) {
                 done(null, false, req.flash("message", "ユーザー名　または　パスワード　が間違っています。"));
             } else {
+                logger.info(`login:${hash(password)}`);
+                logger.info(retObj[0].password);
                 if (retObj[0].password === hash(password)) {
 
                     const currentYyyymmdd = tool.getYYYYMMDD(new Date());
