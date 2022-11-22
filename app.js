@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const security = require('./util/security');
-const flash = require("connect-flash");
+const connectFlash = require("connect-flash");
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -31,9 +31,16 @@ app.use(session({
   }
 }));
 
+//connect-flashをミドルウェアとして設定
+app.use(connectFlash());
+//フラッシュメッセージをresのローカル変数のflashMessagesに代入
+app.use((req, res, next) => {
+  res.locals.flashMessages = req.flash();
+  next();
+});
+
 //認証の初期化
 app.use(...security.initialize());
-app.use(flash());
 
 app.use(logger('dev'));
 app.use(express.json());
