@@ -10,10 +10,17 @@
 
 <body>
   <div class="main-container">
-    <% if (message && message.length !== 0) { %>
-      <div class="alert">
-        <p class="alert-danger"><%= message %></p>
-      </div>
+    <!-- メッセージ -->
+    <% if (flashMessages) { %>
+      <% if (flashMessages.success) { %>
+        <div class="flashes">
+          <div class="flash success"><%= flashMessages.success %></div>
+        </div>
+      <% } else if (flashMessages.error) { %>
+        <div class="flashes">
+          <div class="flash error"><%= flashMessages.error %></div>
+        </div>
+      <% } %>
     <% } %>
     <form name="userform" method="POST">
       <div class="form-area">
@@ -79,17 +86,18 @@
     let updatebtn = document.getElementById("btn_update");
     if (updatebtn) {
       updatebtn.addEventListener("click", () => {
-        document.userform.action = "/users/update/update";
+        // パスワードの更新にも対応するため、絶対パスで指定
+        document.userform.action = "/users/update";
         document.userform.submit();
       })
     }
-    let deletebtn = document.getElementById("btn_delete");
-    if (deletebtn) {
-      deletebtn.addEventListener("click", () => {
-        document.userform.action = "delete";
-        document.userform.submit();
-      })
-    }
+    // let deletebtn = document.getElementById("btn_delete");
+    // if (deletebtn) {
+    //   deletebtn.addEventListener("click", () => {
+    //     document.userform.action = "delete";
+    //     document.userform.submit();
+    //   })
+    // }
   </script>
 </body>
 
