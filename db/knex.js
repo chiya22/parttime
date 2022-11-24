@@ -15,8 +15,8 @@ const connect = () => {
     };
 
     const knex = Knex({
-        client: "pg",
-        // client: "mysql",
+        // client: "pg",
+        client: "mysql",
         connection: configdb,
     });
     knex.client.pool.max = 5;
