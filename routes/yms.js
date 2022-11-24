@@ -189,7 +189,6 @@ router.get('/download/:ym', security.authorize(), (req, res, next) => {
 //対象年月の確定情報アップロード画面へ遷移する
 router.get("/fixupload/:ym", security.authorize(), (req,res) => {
   res.render("upload", {
-    msg: null,
     targetYyyymm: req.params.ym
   })
 });
@@ -199,49 +198,45 @@ router.post('/fixupload', security.authorize(), upload, (req, res) => {
   (async () => {
 
     if (!req.file) {
-      res.render("upload", {
-        msg: 'ファイルを選択してください。',
-        targetYyyymm: req.body.targetYyyymm
-      })
-      return;
-    }
-    // const filename = req.file.originalname;
-    const lines = req.file.buffer.toString().split('\r\n');
+      req.flash("error","ファイルを選択してください")
+      res.redirect("/fixupload/" + req.body.targetYyyymm)
+    } else {
+      // const filename = req.file.originalname;
+      const lines = req.file.buffer.toString().split('\r\n');
 
-    // 対象年月とアップロードされた確定情報の年月が不一致の場合
-    if (lines[0].slice(0,6) !== req.body.targetYyyymm) {
-      res.render("upload", {
-        msg: `アップロードしたファイルの年月が誤っています。${lines[0].slice(0,6)}`,
-        targetYyyymm: req.body.targetYyyymm
-      })
-      return;
-    }
-
-    //既存データを削除
-    await yyyymmdds_fix.removeByYyyymm(lines[0].slice(0,6));
-
-    //ファイルを読込データを登録
-    for (let i=0; i<lines.length; i++) {
-  
-      if (lines[i]) {
-        let items = lines[i].split(",");
-        let inObj = {};
-        inObj.yyyymmdd = items[0];
-        inObj.yyyymm = items[1];
-        inObj.id_users_haya_1 = items[2];
-        inObj.id_users_haya_2 = items[3];
-        inObj.id_users_oso_1 = items[4];
-        inObj.id_users_oso_2 = items[5];
-        inObj.ymd_add = tool.getYYYYMMDD(new Date());
-        inObj.id_add = req.user.id;
-        await yyyymmdds_fix.insert(inObj);
+      // 対象年月とアップロードされた確定情報の年月が不一致の場合
+      if (lines[0].slice(0,6) !== req.body.targetYyyymm) {
+        res.render("upload", {
+          msg: `アップロードしたファイルの年月が誤っています。${lines[0].slice(0,6)}`,
+          targetYyyymm: req.body.targetYyyymm
+        })
+        return;
       }
-    }
 
-    res.render("upload", {
-      msg: req.file.originalname + 'ファイルのアップロードが完了しました',
-      targetYyyymm: req.body.targetYyyymm
-    })
+      //既存データを削除
+      await yyyymmdds_fix.removeByYyyymm(lines[0].slice(0,6));
+
+      //ファイルを読込データを登録
+      for (let i=0; i<lines.length; i++) {
+    
+        if (lines[i]) {
+          let items = lines[i].split(",");
+          let inObj = {};
+          inObj.yyyymmdd = items[0];
+          inObj.yyyymm = items[1];
+          inObj.id_users_haya_1 = items[2];
+          inObj.id_users_haya_2 = items[3];
+          inObj.id_users_oso_1 = items[4];
+          inObj.id_users_oso_2 = items[5];
+          inObj.ymd_add = tool.getYYYYMMDD(new Date());
+          inObj.id_add = req.user.id;
+          await yyyymmdds_fix.insert(inObj);
+        }
+      }
+
+      req.flash("success",req.file.originalname + 'ファイルのアップロードが完了しました');
+      res.redirect("/fixupload/" + req.body.targetYyyymm);
+    }
 
   })();
 });

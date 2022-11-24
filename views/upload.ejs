@@ -12,8 +12,17 @@
   <div class="main-container">
     <h1 class="main-header"><%= targetYyyymm.slice(0,4) %>年<%= targetYyyymm.slice(4,6) %>月</h1>
     <div class="upload-main">
-      <% if (msg) { %>
-        <div class="msg"><%= msg %></div>
+      <!-- メッセージ -->
+      <% if (flashMessages) { %>
+        <% if (flashMessages.success) { %>
+          <div class="flashes">
+            <div class="flash success"><%= flashMessages.success %></div>
+          </div>
+        <% } else if (flashMessages.error) { %>
+          <div class="flashes">
+            <div class="flash error"><%= flashMessages.error %></div>
+          </div>
+        <% } %>
       <% } %>
       <form action="/yms/fixupload"  method="POST" enctype="multipart/form-data">
         <div class="attachment">

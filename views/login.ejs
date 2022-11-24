@@ -10,16 +10,21 @@
 
 <body>
   <div class="main-container">
-    <% if (message && message.length !== 0) { %>
-      <div class="alert">
-        <p class="alert-danger">
-          <%= message %>
-        </p>
-      </div>
-    <% } %>
     <div class="login-header-img">
       <img src="/images/building_logo.svg">
     </div>
+    <!-- メッセージ -->
+    <% if (flashMessages) { %>
+      <% if (flashMessages.success) { %>
+        <div class="flashes">
+          <div class="flash success"><%= flashMessages.success %></div>
+        </div>
+      <% } else if (flashMessages.error) { %>
+        <div class="flashes">
+          <div class="flash error"><%= flashMessages.error %></div>
+        </div>
+      <% } %>
+    <% } %>
     <form action="/login" method="post">
       <div class="form-area">
         <div>

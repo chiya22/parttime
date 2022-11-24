@@ -30,7 +30,7 @@ passport.use("local-strategy", new LocalStrategy({
             // done(null, false, req.flash("message", "ユーザー名　または　パスワード　が間違っています。"));
         } else {
             if (retObj.length === 0) {
-                done(null, false, req.flash("message", "ユーザー名　または　パスワード　が間違っています。"));
+                done(null, false, req.flash("error", "ユーザー名　または　パスワード　が間違っています。"));
             } else {
                 logger.info(`login:${hash(password)}`);
                 logger.info(retObj[0].password);
@@ -39,7 +39,7 @@ passport.use("local-strategy", new LocalStrategy({
                     const currentYyyymmdd = tool.getYYYYMMDD(new Date());
 
                     if (currentYyyymmdd > retObj[0].ymd_end) {
-                        done(null, false, req.flash("message", "ユーザー名　または　パスワード　が間違っています。"));
+                        done(null, false, req.flash("error", "ユーザー名　または　パスワード　が間違っています。"));
                     } else {
                         req.session.regenerate((err) => {
                             if (err) {
@@ -50,7 +50,7 @@ passport.use("local-strategy", new LocalStrategy({
                         });
                     }
                 } else {
-                    done(null, false, req.flash("message", "ユーザー名　または　パスワード　が間違っています。"));
+                    done(null, false, req.flash("error", "ユーザー名　または　パスワード　が間違っています。"));
                 }
             }
         }
