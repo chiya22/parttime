@@ -1,16 +1,4 @@
 {
-    "appenders": {
-        "SystemLogAppender": {
-            "type": "dateFile",
-            "filename": "./logs/crud.log"
-        }
-    },
-    "categories": {
-        "default": {
-            "appenders": [
-                "SystemLogAppender"
-            ],
-            "level": "all"
-        }
-    }
+    "appenders": { "out": { "type": "stdout", "layout": { "type": "basic" } } },
+    "categories": { "default": { "appenders": ["out"], "level": "info" } }
 }
