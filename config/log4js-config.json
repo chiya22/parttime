@@ -2,8 +2,7 @@
     "appenders": {
         "SystemLogAppender": {
             "type": "dateFile",
-            "filename": "./logs/crud.log",
-            "pattern": "-yyyy-MM-dd"
+            "filename": "./logs/crud.log"
         }
     },
     "categories": {
