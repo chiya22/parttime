@@ -16,8 +16,10 @@ const insert = async (inObj) => {
         const query = "insert into memos values ('" + inObj.yyyymm + "','" + inObj.id_users + "','" + inObj.memo + "','" + inObj.ymd_add + "', '" + inObj.id_add + "', '" + inObj.ymd_upd + "', '" + inObj.id_upd + "')";
         logger.info(query);
         const retObj = await knex.raw(query)
-        return retObj;
-        // return retObj[0];
+        // Postgres
+        // return retObj;
+        // MySQL
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -28,8 +30,10 @@ const remove = async (yyyymm, id_users) => {
         const query = "delete from memos where yyyymm = '" + yyyymm + "' and id_users = '" + id_users + "';";
         logger.info(query);
         const retObj = await knex.raw(query)
-        return retObj;
-        // return retObj[0];
+        // Postgres
+        // return retObj;
+        // MySQL
+        return retObj[0];
     } catch(err) {
         throw err;
     }

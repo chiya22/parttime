@@ -19,9 +19,9 @@ const findByYyyymm = async (yyyymm) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -34,9 +34,9 @@ const findByYyyymmdd = async (yyyymmdd) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -49,9 +49,9 @@ const findByYyyymmForDownload = async (yyyymm) => {
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -63,9 +63,9 @@ const insert = async (inObj) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -78,9 +78,9 @@ const update = async (yyyymmdd, id_users_haya_1,id_users_haya_2, id_users_oso_1,
         const retObj = await knex.raw(query)
         // エラー処理なし
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -92,9 +92,9 @@ const removeByYyyymm = async (yyyymm) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }

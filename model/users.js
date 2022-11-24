@@ -26,9 +26,9 @@ const findSelectUser = async (yyyymmdd) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -40,9 +40,9 @@ const insert = async (inObj) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -59,9 +59,9 @@ const update = async (inObj) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -72,9 +72,9 @@ const remove = async (id) => {
         const query = "delete from users where id = '" + id + "'";
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }

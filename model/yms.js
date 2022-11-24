@@ -33,9 +33,9 @@ const findThreeMonth = async () => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj.rows;
+        // return retObj.rows;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -47,9 +47,9 @@ const insert = async (inObj) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -61,9 +61,9 @@ const update = async (inObj) => {
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
@@ -74,9 +74,9 @@ const remove = async (yyyymm) => {
         const query = "delete from yms where yyyymm = '" + yyyymm + "'";
         const retObj = await knex.raw(query)
         // Postgres
-        return retObj;
+        // return retObj;
         // MySql
-        // return retObj[0];
+        return retObj[0];
     } catch(err) {
         throw err;
     }
