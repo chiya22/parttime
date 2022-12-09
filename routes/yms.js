@@ -230,12 +230,14 @@ router.post('/fixupload', security.authorize(), upload, (req, res) => {
           inObj.id_users_oso_2 = items[5];
           inObj.ymd_add = tool.getYYYYMMDD(new Date());
           inObj.id_add = req.user.id;
+          inObj.ymd_upd = tool.getYYYYMMDD(new Date());
+          inObj.id_upd = req.user.id;
           await yyyymmdds_fix.insert(inObj);
         }
       }
 
       req.flash("success",req.file.originalname + 'ファイルのアップロードが完了しました');
-      res.redirect("/fixupload/" + req.body.targetYyyymm);
+      res.redirect("/yms/fixupload/" + req.body.targetYyyymm);
     }
 
   })();
