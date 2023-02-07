@@ -54,6 +54,9 @@ app.use('/yms', ymsRouter);
 app.use('/yyyymmdds', yyyymmddsRouter);
 app.use('/yyyymmdds_fix', yyyymmddsFixRouter);
 
+const cron = require('./util/cron');
+cron.startcron();
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
