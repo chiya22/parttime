@@ -19,46 +19,34 @@ router.get('/:yyyymm', security.authorize(), (req, res, next) => {
 
     let retObjList = [];
     if (retObjYyyymmdd.length !== 0) {
+
       //　存在する場合
       retObjYyyymmdd.forEach((item,idx) => {
         let inObj = {};
         inObj = item;
-        if ((item.role_users_haya_1 !== 'admin') && (item.role_users_oso_1 !== 'admin')) {
-          inObj.status = '確定';
-        } else if ((item.role_users_haya_1 === 'admin') && (item.role_users_oso_1 === 'admin')) {
-          inObj.status = '募集中(早遅)';
-          // 早番のサブが現在のユーザー以外の場合はマスキングする
-          if ((item.id_users_haya_2) && (item.id_users_haya_2 !== req.user.id)) {
-            inObj.nm_users_haya_2 = '*****'
-          }
-          // 遅番のサブが現在のユーザー以外の場合はマスキングする
-          if ((item.id_users_oso_2) && (item.id_users_oso_2 !== req.user.id)) {
-            inObj.nm_users_oso_2 = '*****'
-          }
-        } else if (item.role_users_haya_1 !== 'admin') {
-          inObj.status = '募集中(遅)';
-          // マスキング
-          if ((item.id_users_haya_1 !== req.user.id) && (item.id_users_haya_2 !== req.user.id) && (item.id_users_oso_2 !== req.user.id)) {
-            inObj.nm_users_haya_1 = '*****'
-            if (inObj.id_users_haya_2) {
-              inObj.nm_users_haya_2 = '*****'
-            }
-            if (item.id_users_oso_2) {
-              inObj.nm_users_oso_2 = '*****'
-            }
-          }
+
+        let isHayaBosyu = false;
+        let isOsoBosyu = false;
+
+        // 早
+        if ((item.role_users_haya_1 !== 'admin') && (item.role_users_haya_2 === '')) {
+          isHayaBosyu = true;
+        }
+
+        // 遅
+        if ((item.role_users_oso_1 !== 'admin') && (!item.role_users_oso_2 === '')) {
+          isOsoBosyu = true;
+        }
+
+        // ステータス
+        if ((isHayaBosyu) && (isOsoBosyu)) {
+          inObj.status = '募集中(早遅)'
+        } else if ((isHayaBosyu) && (!isOsoBosyu)) {
+          inObj.status = '募集中(早)'
+        } else if ((!isHayaBosyu) && (isOsoBosyu)) {
+          inObj.status = '募集中(遅)'
         } else {
-          inObj.status = '募集中(早)';
-          // マスキング
-          if ((item.id_users_oso_1 !== req.user.id) && (item.id_users_oso_2 !== req.user.id) && (item.id_user_haya_2 !== req.user.id)) {
-            inObj.nm_users_oso_1 = '*****'
-            if (inObj.id_users_oso_2) {
-              inObj.nm_users_oso_2 = '*****'
-            }
-            if (item.id_users_haya_2) {
-              inObj.nm_users_haya_2 = '*****'
-            }
-          }
+          inObj.status = '確定'
         }
         
         // 募集中を設定する
