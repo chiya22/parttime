@@ -257,16 +257,30 @@ router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
         let inObj = {};
         inObj = item;
 
-        if ((item.role_users_haya_1 !== 'admin') && (item.role_users_oso_1 !== 'admin')) {
-          inObj.status = '確定';
-        } else if ((item.role_users_haya_1 === 'admin') && (item.role_users_oso_1 === 'admin')) {
-          inObj.status = '募集中(早遅)';
-        } else if (item.role_users_haya_1 !== 'admin') {
-          inObj.status = '募集中(遅)';
-        } else {
-          inObj.status = '募集中(早)';
+        let isHayaBosyu = false;
+        let isOsoBosyu = false;
+
+        // 早
+        if ((item.role_users_haya_1 === 'admin') && (inObj.id_users_haya_2 === '')) {
+          isHayaBosyu = true;
         }
 
+        // 遅
+        if ((item.role_users_oso_1 === 'admin') && (inObj.id_users_oso_2 === '')) {
+          isOsoBosyu = true;
+        }
+
+        // ステータス
+        if ((isHayaBosyu) && (isOsoBosyu)) {
+          inObj.status = '募集中(早遅)'
+        } else if ((isHayaBosyu) && (!isOsoBosyu)) {
+          inObj.status = '募集中(早)'
+        } else if ((!isHayaBosyu) && (isOsoBosyu)) {
+          inObj.status = '募集中(遅)'
+        } else {
+          inObj.status = '確定'
+        }
+        
         if (!item.id_users_haya_1) {
           inObj.id_users_haya_1 = '募集中'
           inObj.nm_users_haya_1 = '募集中'
