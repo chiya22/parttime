@@ -261,12 +261,12 @@ router.get('/fix/:yyyymm', security.authorize(), (req, res, next) => {
         let isOsoBosyu = false;
 
         // 早
-        if ((item.role_users_haya_1 === 'admin') && (inObj.id_users_haya_2 === '')) {
+        if ((item.role_users_haya_1 === 'admin') && (!inObj.id_users_haya_2)) {
           isHayaBosyu = true;
         }
 
         // 遅
-        if ((item.role_users_oso_1 === 'admin') && (inObj.id_users_oso_2 === '')) {
+        if ((item.role_users_oso_1 === 'admin') && (!inObj.id_users_oso_2)) {
           isOsoBosyu = true;
         }
 
