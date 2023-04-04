@@ -105,6 +105,22 @@ const getYYYYMMDD = (date) => {
   return tmp
 }
 
+/**
+ * 日付より1日後のyyyymmdd形式の文字列を返却する
+ * @param {*} date型
+ * @returns yyyymmdd形式の文字列
+ */
+const getYYYYMMDDAfterOneDay = (date) => {
+  // 一日加算
+  date.setDate( date.getDate() + 1);
+  let tmp;
+  tmp = '' + date.getFullYear();
+  tmp += '' + ('0' + (date.getMonth() + 1)).slice(-2);
+  tmp += '' + ('0' + date.getDate()).slice(-2);
+  return tmp
+}
+
+
 //
 // 年月より年月日のリストを取得する
 //
@@ -120,11 +136,11 @@ const getYyyymmddByYyyymm = (yyyymm) => {
   return retYyyymmdd;
 }
 
-
 module.exports = {
   returnvalue,
   getDayKubun,
   getHoliday,
   getYYYYMMDD,
   getYyyymmddByYyyymm,
+  getYYYYMMDDAfterOneDay,
 };
