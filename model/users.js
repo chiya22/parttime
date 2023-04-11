@@ -36,7 +36,7 @@ const findSelectUser = async (yyyymmdd) => {
 
 const insert = async (inObj) => {
     try {
-        const query = "insert into users ( id, name, password, role, ymd_add, id_add, ymd_end, id_end, ymd_upd, id_upd, group_id ) values ('" + inObj.id + "','" + inObj.name + "','" + inObj.password + "','" + inObj.role + "','" + inObj.ymd_add + "','" + inObj.id_add + "','" + inObj.ymd_end + "','" + inObj.id_end + "','" + inObj.ymd_upd + "','" + inObj.id_upd + "', NULL )";
+        const query = "insert into users ( id, name, password, role, ymd_add, id_add, ymd_end, id_end, ymd_upd, id_upd, id_line_group ) values ('" + inObj.id + "','" + inObj.name + "','" + inObj.password + "','" + inObj.role + "','" + inObj.ymd_add + "','" + inObj.id_add + "','" + inObj.ymd_end + "','" + inObj.id_end + "','" + inObj.ymd_upd + "','" + inObj.id_upd + "', NULL )";
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
