@@ -59,7 +59,7 @@ const findByYyyymmForDownload = async (yyyymm) => {
 
 const insert = async (inObj) => {
     try {
-        const query = "insert into yyyymmdds_fix values ('" + inObj.yyyymmdd + "','" + inObj.yyyymm + "'," + tool.returnvalue(inObj.id_users_haya_1) + "," + tool.returnvalue(inObj.id_users_haya_2) + "," + tool.returnvalue(inObj.id_users_oso_1) + "," + tool.returnvalue(inObj.id_users_oso_2) + ", NULL, '" + inObj.ymd_add + "','" + inObj.id_add + "','" + inObj.ymd_upd + "','" + inObj.id_upd + "')";
+        const query = "insert into yyyymmdds_fix values ('" + inObj.yyyymmdd + "','" + inObj.yyyymm + "'," + tool.returnvalue(inObj.id_users_haya_1) + "," + tool.returnvalue(inObj.id_users_haya_2) + "," + tool.returnvalue(inObj.id_users_oso_1) + "," + tool.returnvalue(inObj.id_users_oso_2) + ", '" + inObj.ymd_add + "','" + inObj.id_add + "','" + inObj.ymd_upd + "','" + inObj.id_upd + "')";
         logger.info(query);
         const retObj = await knex.raw(query)
         // Postgres
