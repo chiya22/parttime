@@ -66,6 +66,7 @@ const startcron = () => {
 
 const sendLineMessage = (messagebody, sendToId) => {
   (async () => {
+    
     const message = {
       type: 'text',
       text: messagebody
@@ -78,13 +79,15 @@ const sendLineMessage = (messagebody, sendToId) => {
     
     // LINE送信
     // await client.pushMessage(process.env.LINE_SHAIN_GROUP, message)
-    await client.pushMessage(sendToId, message)
+    if (sendToId) {
+      await client.pushMessage(sendToId, message)
       .then(() => {
         logger.info("メッセージの送信に成功しました。");
       })
       .catch((err) => {
         logger.info("メッセージの送信に失敗しました。：" + err);
       });
+    }
   })()
 };
 
