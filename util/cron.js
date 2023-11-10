@@ -29,7 +29,7 @@ const startcron = () => {
         // 早番１
         if (yyyymmdd_fix[0].id_line_group_haya_1) {
           let messagebody;
-          messagebody = `▼ 明日のシフト通知 ▼`;
+          messagebody = `▼ 明日の早番シフト通知 ▼`;
           messagebody += `\r\n${yyyymmdd_fix[0].nm_users_haya_1}さんは明日${yyyymmdd.slice(4,6)}月${yyyymmdd.slice(6,8)}日(${youbiStr})の早番です。`;
           messagebody += `\r\n忘れずに出勤お願いしますロボ`;
           await sendLineMessage(messagebody, yyyymmdd_fix[0].id_line_group_haya_1)
@@ -37,7 +37,7 @@ const startcron = () => {
         // 早番２
         if (yyyymmdd_fix[0].id_line_group_haya_2) {
           let messagebody;
-          messagebody = `▼ 明日のシフト通知 ▼`;
+          messagebody = `▼ 明日の早番シフト通知 ▼`;
           messagebody += `\r\n${yyyymmdd_fix[0].nm_users_haya_2}さんは明日${yyyymmdd.slice(4,6)}月${yyyymmdd.slice(6,8)}日(${youbiStr})の早番です。`;
           messagebody += `\r\n忘れずに出勤お願いしますロボ`;
           await sendLineMessage(messagebody, yyyymmdd_fix[0].id_line_group_haya_2)
@@ -45,7 +45,7 @@ const startcron = () => {
         // 遅番１
         if (yyyymmdd_fix[0].id_line_group_oso_1) {
           let messagebody;
-          messagebody = `▼ 明日のシフト通知 ▼`;
+          messagebody = `▼ 明日の遅番シフト通知 ▼`;
           messagebody += `\r\n${yyyymmdd_fix[0].nm_users_oso_1}さんは明日${yyyymmdd.slice(4,6)}月${yyyymmdd.slice(6,8)}日(${youbiStr})の遅番です。`;
           messagebody += `\r\n忘れずに出勤お願いしますロボ`;
           await sendLineMessage(messagebody, yyyymmdd_fix[0].id_line_group_oso_1)
@@ -53,7 +53,7 @@ const startcron = () => {
         // 遅番２
         if (yyyymmdd_fix[0].id_line_group_oso_2) {
           let messagebody;
-          messagebody = `▼ 明日のシフト通知 ▼`;
+          messagebody = `▼ 明日の遅番シフト通知 ▼`;
           messagebody += `\r\n${yyyymmdd_fix[0].nm_users_oso_2}さんは明日${yyyymmdd.slice(4,6)}月${yyyymmdd.slice(6,8)}日(${youbiStr})の遅番です。`;
           messagebody += `\r\n忘れずに出勤お願いしますロボ`;
           await sendLineMessage(messagebody, yyyymmdd_fix[0].id_line_group_oso_2)
