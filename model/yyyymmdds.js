@@ -55,7 +55,7 @@ const findByYyyymmGroupByNoUser = async (yyyymm) => {
 const findByYyyymmForDownload = async (yyyymm) => {
     try {
         // const query = "(SELECT a.id_users AS id_users, b.name AS name_users, a.yyyymmdd AS yyyymmdd, a.kubun FROM yyyymmdds a LEFT OUTER JOIN users b ON a.id_users = b.id  WHERE a.yyyymm = '" + yyyymm + "') UNION ALL (SELECT a.id_users AS id_users, b.name AS name_users,'MEMO' as yyyyymmdd, REGEXP_REPLACE(a.memo,'\r|\n|\r\n', '　','g') as kubun FROM memos a LEFT OUTER JOIN users b ON a.id_users = b.id  WHERE a.yyyymm = '" + yyyymm + "') ORDER BY id_users ASC, yyyymmdd ASC"
-        const query = "(SELECT a.id_users AS id_users, b.name AS name_users, a.yyyymmdd AS yyyymmdd, a.kubun FROM yyyymmdds a LEFT OUTER JOIN users b ON a.id_users = b.id  WHERE a.yyyymm = '" + yyyymm + "') UNION ALL (SELECT a.id_users AS id_users, b.name AS name_users,'MEMO' as yyyyymmdd, replace(replace(REPLACE(a.memo, '\r\n', ' '), '\r', ' '), '\n', ' ') as kubun FROM memos a LEFT OUTER JOIN users b ON a.id_users = b.id  WHERE a.yyyymm = '" + yyyymm + "') ORDER BY id_users ASC, yyyymmdd ASC"
+        const query = "SELECT * FROM ((SELECT a.id_users AS id_users, b.name AS name_users, a.yyyymmdd AS yyyymmdd, a.kubun FROM yyyymmdds a LEFT OUTER JOIN users b ON a.id_users = b.id  WHERE a.yyyymm = '" + yyyymm + "') UNION ALL (SELECT a.id_users AS id_users, b.name AS name_users,'MEMO' as yyyyymmdd, replace(replace(REPLACE(a.memo, '\r\n', ' '), '\r', ' '), '\n', ' ') as kubun FROM memos a LEFT OUTER JOIN users b ON a.id_users = b.id  WHERE a.yyyymm = '" + yyyymm + "')) c ORDER BY c.id_users ASC, c.yyyymmdd ASC"
         logger.info(query);
         const retObj = await knex.raw(query);
         // Postgres
