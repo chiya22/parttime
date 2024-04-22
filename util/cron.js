@@ -62,8 +62,8 @@ const startcron = () => {
         // 管理者
         let kanrimessagebody;
         kanrimessagebody = `▼ 明日${yyyymmdd.slice(4,6)}月${yyyymmdd.slice(6,8)}日(${youbiStr})のシフト通知 ▼`;
-        kanrimessagebody += `\r\n早番：${yyyymmdd_fix[0].nm_users_haya_1}、${yyyymmdd_fix[0].nm_users_haya_2}`;
-        kanrimessagebody += `\r\n遅番：${yyyymmdd_fix[0].nm_users_oso_1}、${yyyymmdd_fix[0].nm_users_oso_2}`;
+        kanrimessagebody += `\r\n早番：${yyyymmdd_fix[0].nm_users_haya_1}、${yyyymmdd_fix[0].nm_users_haya_2?yyyymmdd_fix[0].nm_users_haya_2:"－"}`;
+        kanrimessagebody += `\r\n遅番：${yyyymmdd_fix[0].nm_users_oso_1}、${yyyymmdd_fix[0].nm_users_oso_2?yyyymmdd_fix[0].nm_users_oso_2:"－"}`;
         await sendLineMessage(kanrimessagebody, "U91d040508601006d890197c9bafdd6b2"); //吉田宛
 
       })();
